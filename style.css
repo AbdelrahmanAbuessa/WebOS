@@ -1,0 +1,40 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+    height: 100vh;
+    background-color: black;
+}
+
+.installation-terminal-window {
+    width: 750px;
+    height: 500px;
+    border: 1px solid white;
+    padding: 3px;
+    color: white;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.text-input {
+    display: flex;
+    align-items: center;
+}
+
+.ternimal-cmd-dir {
+    width: fit-content;
+}
+
+.terminal-command-input {
+    background-color: black;
+    color: white;
+    border: none;
+    outline: none;
+    width: 200px;
+}
