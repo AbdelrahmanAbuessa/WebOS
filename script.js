@@ -25,21 +25,41 @@ if (existing_user) {
     // load welcome screen
 } else {
     document.body.innerHTML = "";
-    loadCMD();
+    loadCMD(null);
 }
 
-function loadCMD() {
-    let cmd_guide_text
-    let error = null;
+document.addEventListener("keypress", function (e) {
+    let key = e.key;
+    if (key === "Enter") {
+        addCMDContent();
+    }
+})
 
-    if (!existing_user && error === null) {
+function addCMDContent() {
+    let command_element = document.querySelectorAll(".terminal-command-input");
+    let command = command_element[command_element.length - 1].value;
+    if (command === "") {
+        loadCMD("empty");
+    } else if (command.indexOf("cls") === 0) {
+        clearCMD();
+    } else if (command.indexOf("echo") === 0) {
+        
+    }
+}
+
+function loadCMD(action) {
+    instal_terminal_window.innerHTML = "";
+    
+    let cmd_guide_text;
+
+    if (!existing_user && action === null) {
         cmd_guide_text = `
             JavaScript OS Installation Process<br>
             Enter "<b>HELP</b>" to see all available commands
         `
-    } else {
+    } else if (action === "empty") {
         cmd_guide_text = `
-            Welcome
+            Please Enter a Valid Command
         `
     }
 
@@ -69,7 +89,7 @@ function loadCMD() {
         class: "terminal-cmd-dir",
     });
 
-    cmd_input_label.text = "JSOS/:>";
+    cmd_input_label.text = `\n JSOS/:>`;
 
     cmd_input.label = cmd_input_label;
     cmd_input.text = cmd_input_text;
@@ -86,20 +106,29 @@ function loadCMD() {
             let node_label = document.createElement(i.label.element);
             node_label.className = i.label.class;
             node_label.for = i.label.for;
+            node_label.innerText = i.label.text;
 
             let node_input = document.createElement(i.text.element);
             node_input.id = i.text.id;
             node_input.className = i.text.class;
             node_input.type = i.text.type;
+            node_input.style.width = `calc(750px - ${node_label.style.width})`
+
             node.appendChild(node_label);
             node.appendChild(node_input);
         }
         
         instal_terminal_window.appendChild(node);
-        console.log(i);
     });
     
     document.body.appendChild(instal_terminal_window);
+    instal_terminal_window.scrollTo(0, 999999999999999999999999999999);
+}
+
+function clearCMD() {
+    instal_terminal_window.innerHTML =  "";
+    cmd_content = [];
+    loadCMD(null);
 }
 
 // possible commands to enter: 
