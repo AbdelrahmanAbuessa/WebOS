@@ -14,6 +14,94 @@
 // and the needed items are put inside an array
 // the terminal will load all the content
 
+let cmd_content = [];
+
+let instal_terminal_window = document.createElement("div");
+instal_terminal_window.className = "installation-terminal-window"
+
+let existing_user = false;
+if (existing_user) {
+    document.body.innerHTML = "";
+    // load welcome screen
+} else {
+    document.body.innerHTML = "";
+    loadCMD();
+}
+
+function loadCMD() {
+    let cmd_guide_text
+    let error = null;
+
+    if (!existing_user && error === null) {
+        cmd_guide_text = `
+            JavaScript OS Installation Process<br>
+            Enter "<b>HELP</b>" to see all available commands
+        `
+    } else {
+        cmd_guide_text = `
+            Welcome
+        `
+    }
+
+    let cmd_guide = new Object({
+        element: "div",
+        class: "cmd-guide-content",
+        text: cmd_guide_text,
+        type: "text",
+    });
+
+    let cmd_input = new Object({
+        element: "div",
+        class: "terminal-input",
+        type: "input",
+    });
+    
+    let cmd_input_text = new Object({
+        element: "input",
+        type: "text",
+        id: "text", 
+        class: "terminal-command-input", 
+    });
+
+    let cmd_input_label = new Object({
+        element: "label",
+        for: cmd_input_text.id,
+        class: "terminal-cmd-dir",
+    });
+
+    cmd_input_label.text = "JSOS/:>";
+
+    cmd_input.label = cmd_input_label;
+    cmd_input.text = cmd_input_text;
+
+    cmd_content.push(cmd_guide);
+    cmd_content.push(cmd_input);
+
+    cmd_content.forEach(i => {
+        let node = document.createElement(i.element);
+        node.className = i.class;
+        if (i.type === "text") {
+            node.innerHTML = i.text;
+        } else if (i.type === "input") {
+            let node_label = document.createElement(i.label.element);
+            node_label.className = i.label.class;
+            node_label.for = i.label.for;
+
+            let node_input = document.createElement(i.text.element);
+            node_input.id = i.text.id;
+            node_input.className = i.text.class;
+            node_input.type = i.text.type;
+            node.appendChild(node_label);
+            node.appendChild(node_input);
+        }
+        
+        instal_terminal_window.appendChild(node);
+        console.log(i);
+    });
+    
+    document.body.appendChild(instal_terminal_window);
+}
+
 // possible commands to enter: 
 // color [hex / name]: change the color of the terminal
 // bgcolor [hex / name]: change the background color of the terminal
