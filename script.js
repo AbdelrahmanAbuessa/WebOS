@@ -1,19 +1,3 @@
-// GUIDE TO BUILD THE INSTALLATION TERMINAL
-// set a value for preperation (get it from local storage if user is created)
-// if the value is (not installed yet) then load the terminal
-// if not then load the sign in screen
-// for now there is no sign in screen so it is just the terminal
-// load the installation terminal content
-// the terminal "dir and command writing spot" will be stored in an object
-// for now there is no dir change
-// the input field is automatically activated
-// when user presses "enter" it checks for the input field
-// if input field is empty then display "please enter a valid command"
-// display another dir and command spot, activate the text input, add all those to an array
-// each time the enter button is pressed, the terminal is emptied out, 
-// and the needed items are put inside an array
-// the terminal will load all the content
-
 let cmd_content = [];
 
 let instal_terminal_window = document.createElement("div");
@@ -56,7 +40,6 @@ function addCMDContent() {
         }
         actionCMD(action, value);
     }
-
 }
 
 function actionCMD(act, val) {
@@ -83,10 +66,33 @@ function actionCMD(act, val) {
         } else {
             loadCMD("invalid");
         }
+    } else if (act === "echo") {
+        if (val !== null) {
+            loadCMD("echo", val);
+        } else {
+            loadCMD("invalid");
+        }
+    } else if (act === "quit") {
+        loadCMD("quit");
+        window.setTimeout(function () {
+            window.close();
+        }, 1000)
+    } else if (act === "install") {
+        install(val);
+    } else if (act === "help") {
+        loadCMD("help");
+    } else if (act === "mohemmat") {
+        loadCMD("mohemmat");
+    } else if (act === "bluey") {
+        loadCMD("bluey");
+    } else if (act === "command") {
+        loadCMD("command");
+    } else {
+        loadCMD("cmd-invalid", act);
     }
 }
 
-function loadCMD(action) {
+function loadCMD(action, string) {
     instal_terminal_window.innerHTML = "";
     
     let cmd_guide_text;
@@ -104,6 +110,77 @@ function loadCMD(action) {
         cmd_guide_text = `success`;
     } else if (action === "invalid") {
         cmd_guide_text = `INVALID, Please Enter a Valid Value`;
+    } else if (action === "echo") {
+        cmd_guide_text = string;
+    } else if (action === "quit") {
+        cmd_guide_text = `Quitting...`;
+    } else if (action === "jsos") {
+        cmd_guide_text = `installing`;
+        window.setTimeout(function () {
+            installOS();
+        })
+    } else if (action === "winOS") {
+        cmd_guide_text = `Get a life lmao, who still uses windows in 2024`;
+    } else if (action === "macOS") {
+        cmd_guide_text = `Bro thinks he got a 2000$ apple computer LMAOOO get a life bro`;
+    } else if (action === "linux") {
+        cmd_guide_text = `Nah you wanna start hacking, well sorry NERD but i aint here for that shit`;
+    } else if (action === "help") {
+        cmd_guide_text = `
+            COMMAND
+             &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+            FUNCTION 
+            <br>
+            <br>
+            <br>
+
+            HELP
+             &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+            DISPLAY THIS MENU
+            <br>
+            <br>
+            COLOR   
+             &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+            CHANGE THE TEXT COLOR [0 - 9] 
+            <br>
+            <br>
+            BGCOLOR   
+             &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+            CHANGE THE BACKGROUND COLOR [0 - 9] 
+            <br>
+            <br>
+            ECHO
+             &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+            DISPLAY A MESSAGE [string] 
+            <br>
+            <br>
+            INSTALL
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+            INSTALL OS [winOS | macOS | linux | jsOS]
+            <br>
+            <br>
+            TITLE
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+            CHANGE THE SESSION TITLE [string]
+            <br>
+            <br>
+            CLS
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+            CLEAR THE COMMAND PROMPT
+            <br>
+            <br>
+            QUIT
+             &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+            CLOSE THE PROMPT
+        `;
+    } else if (action === "cmd-invalid") {
+        cmd_guide_text = `"${string}" is not a valid command, please enter "<b>HELP</b>" to see all available commands `;
+    } else if (action === "command") {
+        cmd_guide_text = `this is a CMD :D`
+    } else if (action === "mohemmat") {
+        cmd_guide_text = `ALL HAIL OUR CREATOR, THE MOST POWERFUL, THE MOST BEAUTIFUL, ALL HAIL MOHEMMAT`;
+    } else if (action === "bluey") {
+        cmd_guide_text = `bluey mentioned :banditdance: :patjamming: :bingoYEAH: :blueythumbsup:`;
     }
 
     let cmd_guide = new Object({
@@ -180,6 +257,20 @@ function clearCMD() {
     loadCMD(null);
 }
 
+function install(string) {
+    if (string === "winOS") {
+        loadCMD("winOS");
+    } else if (string === "macOS") {
+        loadCMD("macOS");
+    } else if (string === "linux") {
+        loadCMD("linux");
+    } else if (string === "jsOS") {
+        loadCMD("jsos");
+    } else {
+        loadCMD("invalid");
+    }
+}
+
 function setColor(i) {
     let color;
     switch(i) {
@@ -220,8 +311,21 @@ function setColor(i) {
     return color;
 }
 
-// possible commands to enter: 
-// title [string]: changes the window title
-// echo [string]: just prints a message
-// install [winOS | JSOS | macOS | Linux]: displays a funny message for each one, but installs legit JSOS
-// quit: closes the entire window altogether
+////////////////////////////////INSTALLATION BEGINS////////////////////////////////////////////
+
+// GUIDE TO INSTALLATION:
+// Empty out the entire body
+// Load the initial Loading Page, Wait a bit, then Load the starting Page
+// Starting Page containes instructions about what to do
+// when user reaches the installation step, a loading menu replica of the windows 10 installation will be shown
+// install speed will be determined randomly
+// install page containes: loading bar, currently downloading, instructions.
+// when download is completed, the boring loading page is shown
+// user greeted, making settings (username, password, background, profile, etc)
+// one last click before user has full access to the system
+
+function installOS() {
+    window.setTimeout(function () {
+        document.body.innerHTML = "";
+    }, 3000)
+}
