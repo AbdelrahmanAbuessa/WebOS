@@ -38,12 +38,51 @@ document.addEventListener("keypress", function (e) {
 function addCMDContent() {
     let command_element = document.querySelectorAll(".terminal-command-input");
     let command = command_element[command_element.length - 1].value;
+    let action;
+    let value = null;
     if (command === "") {
         loadCMD("empty");
-    } else if (command.indexOf("cls") === 0) {
+    } else {
+        if (command.indexOf(" ") === -1) {
+            action = command;
+        } else {
+            for (let i = 0; i <= command.length; i++) {
+                if (command[i] === " ") {
+                    action = command.substr(0, i);
+                    value = command.substr(i + 1, command.length);
+                    break;
+                }
+            }
+        }
+        actionCMD(action, value);
+    }
+
+}
+
+function actionCMD(act, val) {
+    if (act === "cls") {
         clearCMD();
-    } else if (command.indexOf("echo") === 0) {
-        
+    } else if (act === "color") {
+        if (setColor(parseInt(val)) !== "err_invalid_value") {
+            instal_terminal_window.style.color = setColor(parseInt(val));
+            loadCMD("success");
+        } else {
+            loadCMD("invalid");
+        }
+    } else if (act === "bgcolor") {
+        if (setColor(parseInt(val)) !== "err_invalid_value") {
+            instal_terminal_window.style.backgroundColor = setColor(parseInt(val));
+            loadCMD("success");
+        } else {
+            loadCMD("invalid");
+        }
+    } else if (act === "title") {
+        if (val !== null) {
+            document.title = val;
+            loadCMD("success");
+        } else {
+            loadCMD("invalid");
+        }
     }
 }
 
@@ -61,6 +100,10 @@ function loadCMD(action) {
         cmd_guide_text = `
             Please Enter a Valid Command
         `
+    } else if (action === "success") {
+        cmd_guide_text = `success`;
+    } else if (action === "invalid") {
+        cmd_guide_text = `INVALID, Please Enter a Valid Value`;
     }
 
     let cmd_guide = new Object({
@@ -114,6 +157,12 @@ function loadCMD(action) {
             node_input.type = i.text.type;
             node_input.style.width = `calc(750px - ${node_label.style.width})`
 
+            if (cmd_content.indexOf(i) < cmd_content.length - 1) {
+                node_input.disabled = true;
+            } else {
+                node_input.disabled = false;
+            }
+
             node.appendChild(node_label);
             node.appendChild(node_input);
         }
@@ -131,11 +180,48 @@ function clearCMD() {
     loadCMD(null);
 }
 
+function setColor(i) {
+    let color;
+    switch(i) {
+        default:
+            color = "err_invalid_value";
+            break;
+        case 1:
+            color = "white";
+            break;
+        case 2:
+            color = "red";
+            break;
+        case 3:
+            color = "green";
+            break;
+        case 4:
+            color = "blue";
+            break;
+        case 5:
+            color = "yellow";
+            break;
+        case 6:
+            color = "orange";
+            break;
+        case 7:
+            color = "pink";
+            break;
+        case 8:
+            color = "purple";
+            break;
+        case 9:
+            color = "lightblue";
+            break;
+        case 0:
+            color = "black";
+            break;
+    }
+    return color;
+}
+
 // possible commands to enter: 
-// color [hex / name]: change the color of the terminal
-// bgcolor [hex / name]: change the background color of the terminal
 // title [string]: changes the window title
 // echo [string]: just prints a message
-// cls: clears the cmd
 // install [winOS | JSOS | macOS | Linux]: displays a funny message for each one, but installs legit JSOS
 // quit: closes the entire window altogether
