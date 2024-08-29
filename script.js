@@ -4,6 +4,8 @@ let installation_corrupted = false;
 
 let dialogue = [];
 
+let setup_percentage = [];
+
 let delay = 0;
 
 let instal_terminal_window = document.createElement("div");
@@ -319,7 +321,6 @@ function setColor(i) {
 ////////////////////////////////INSTALLATION BEGINS////////////////////////////////////////////
 
 // GUIDE TO INSTALLATION:
-//  a loading menu replica of the windows 10 installation will be shown
 // install speed will be determined randomly
 // install page containes: loading bar, currently downloading, instructions.
 // when download is completed, the boring loading page is shown
@@ -381,6 +382,45 @@ let instructions = `
     <div btn="" class="setup-btn" id="setup-proceed">Proceed</div>
 `;
 
+let install_page = `
+    <div btn="" class="close-installation" id="abort-installation">X</div>
+    <div class="install-title">Installing JavaScript OS</div>
+    <div class="install-content">
+        <div class="install-bar">
+            <ul>
+                <li>
+                    <span class="install-step-title">Collecting Information</span>
+                    <span class="remaining-persent" id="info-calc">(0%)</span>
+                </li>
+                <li>
+                    <span class="install-step-title">Initializing Setup</span>
+                    <span class="remaining-persent" id="setup-init">(0%)</span>
+                </li>
+                <li>
+                    <span class="install-step-title">Installing Frameworks</span>
+                    <span class="remaining-persent" id="frmwrk">(0%)</span>
+                </li>
+                <li>
+                    <span class="install-step-title">Applying Settings</span>
+                    <span class="remaining-persent" id="settings">(0%)</span>
+                </li>
+                <li>
+                    <span class="install-step-title">Improving User Experience</span>
+                    <span class="remaining-persent" id="ux">(0%)</span>
+                </li>
+            </ul>
+        </div>
+        <div class="install-tips">
+            <span>Please Be Patient</span>
+            <br>
+            <span>DO NOT ABORT OR CANCEL PROCESS AT ALL COSTS</span>
+        </div>
+    </div>
+    <div class="loading-bar">
+        <div class="bar" id="bar"></div>
+    </div>
+`
+
 dialogue.push(installation_startPage);
 dialogue.push(instructions);
 dialogue.push("installation-loading");
@@ -405,6 +445,8 @@ function installOS() {
     }, delay * 2.5)
 }
 
+// startInstall();
+
 document.addEventListener("click", function (e) {
     let targetElement = e.target;
     if (targetElement.id === "setup-proceed") {
@@ -424,5 +466,26 @@ document.addEventListener("click", function (e) {
 })
 
 function startInstall() {
-    
+    window_.innerHTML = "";
+    window_.innerHTML = install_page;
+    let info_col = document.getElementById("info-calc");
+    let init_setup = document.getElementById("setup-init");
+    let framework = document.getElementById("frmwrk");
+    let stngs = document.getElementById("settings");
+    let ux = document.getElementById("ux");
+    setup_percentage.push(info_col);
+    setup_percentage.push(init_setup);
+    setup_percentage.push(framework);
+    setup_percentage.push(stngs);
+    setup_percentage.push(ux);
+    for (let i = 0; i < setup_percentage.length; i++) {
+        let number = 0;
+        let increment = Math.random() / 10;
+        if (number < 1) {
+            window.setTimeout(function () {
+                number += increment;
+                setup_percentage[i].innerHTML = `(${Math.floor(number * 100)}%)`
+            }, 500)
+        }
+    }
 }
