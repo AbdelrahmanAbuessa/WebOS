@@ -1,5 +1,7 @@
 let cmd_content = [];
 
+let delay = 0;
+
 let instal_terminal_window = document.createElement("div");
 instal_terminal_window.className = "installation-terminal-window"
 
@@ -8,8 +10,9 @@ if (existing_user) {
     document.body.innerHTML = "";
     // load welcome screen
 } else {
-    document.body.innerHTML = "";
-    loadCMD(null);
+    // document.body.innerHTML = "";
+    // loadCMD(null);
+    installOS();
 }
 
 document.addEventListener("keypress", function (e) {
@@ -116,9 +119,7 @@ function loadCMD(action, string) {
         cmd_guide_text = `Quitting...`;
     } else if (action === "jsos") {
         cmd_guide_text = `installing`;
-        window.setTimeout(function () {
-            installOS();
-        })
+        installOS();
     } else if (action === "winOS") {
         cmd_guide_text = `Get a life lmao, who still uses windows in 2024`;
     } else if (action === "macOS") {
@@ -314,8 +315,6 @@ function setColor(i) {
 ////////////////////////////////INSTALLATION BEGINS////////////////////////////////////////////
 
 // GUIDE TO INSTALLATION:
-// Empty out the entire body
-// Load the initial Loading Page, Wait a bit, then Load the starting Page
 // Starting Page containes instructions about what to do
 // when user reaches the installation step, a loading menu replica of the windows 10 installation will be shown
 // install speed will be determined randomly
@@ -324,8 +323,45 @@ function setColor(i) {
 // user greeted, making settings (username, password, background, profile, etc)
 // one last click before user has full access to the system
 
+let startup_loading = document.createElement("div");
+startup_loading.className = "os";
+startup_loading.innerHTML = 
+`
+    <div class="os-logo">
+        JavaScript OS
+    </div>
+    <div class="loading">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+`
+
+let initial_setup = document.createElement("div");
+initial_setup.className = "initial-setup"
+initial_setup.innerHTML = `
+    <div class="window">
+        <span class="text">Welcome to JavaScript OS Setup Process</span>
+        <div btn="" class="setup-btn" id="setup-proceed">Proceed</div>
+    </div>
+`
+
 function installOS() {
     window.setTimeout(function () {
         document.body.innerHTML = "";
-    }, 3000)
+    }, delay / 2)
+    window.setTimeout(function () {
+        document.body.appendChild(startup_loading);
+    }, delay);
+    window.setTimeout(function () {
+        document.body.innerHTML = "";
+    }, delay * 2)
+    window.setTimeout(function () {
+        document.body.appendChild(initial_setup);
+        let proceed_btn = document.getElementById("setup-proceed");
+        proceed_btn.onclick = function () {
+            console.log("proceed");
+        }
+    }, delay * 2.5)
 }
