@@ -1,5 +1,9 @@
 let cmd_content = [];
 
+let installation_corrupted = false;
+
+let dialogue = [];
+
 let delay = 0;
 
 let instal_terminal_window = document.createElement("div");
@@ -315,8 +319,7 @@ function setColor(i) {
 ////////////////////////////////INSTALLATION BEGINS////////////////////////////////////////////
 
 // GUIDE TO INSTALLATION:
-// Starting Page containes instructions about what to do
-// when user reaches the installation step, a loading menu replica of the windows 10 installation will be shown
+//  a loading menu replica of the windows 10 installation will be shown
 // install speed will be determined randomly
 // install page containes: loading bar, currently downloading, instructions.
 // when download is completed, the boring loading page is shown
@@ -340,12 +343,52 @@ startup_loading.innerHTML =
 
 let initial_setup = document.createElement("div");
 initial_setup.className = "initial-setup"
-initial_setup.innerHTML = `
-    <div class="window">
-        <span class="text">Welcome to JavaScript OS Setup Process</span>
-        <div btn="" class="setup-btn" id="setup-proceed">Proceed</div>
-    </div>
+
+let window_ = document.createElement("div");
+window_.className = "window";
+let installation_startPage = `
+<div btn="" class="close-installation" id="abort-installation">X</div>
+<span class="text setup-intro">Welcome to JavaScript OS Setup Process</span>
+<div btn="" class="setup-btn" id="setup-proceed">Proceed</div>
 `
+
+let instructions = `
+    <div btn="" class="close-installation" id="abort-installation">X</div>
+    <span class="text setup-instructions">INSTRUCTIONS</span>
+    <span class="text-instructions">
+        PLEASE READ CAREFULLY BEFORE PROCEEDING: <br>
+        CLICKING "PROCEED" WITHOUT READING COULD POTENTIALLY HARM YOUR SYSTEM <br>
+        <br>
+        1- After clicking "proceed", JavaScriptOS will be automatically installed on your device,
+        it will be the only accessible OS on your device, and you CAN'T replace it with any other OS
+        <br><br>
+        2- The installation process may take some time ranging from a couple of minutes, to almost 24 hours
+        <br><br>
+        3- If the installation process is interrupted for any reason, your device might be corrupted beyond maintenance
+        <br><br>
+        4- After the installation process terminates, you will be prompted to set a username, a password,
+        a profile picture, and a background image, you can fully customize your OS user anyway you like
+        <br><br>
+        5- You will need to remember your password as you will be required to enter it everytime you want to sign in, 
+        forgetting the password could lead to all your data being deleted off the system
+        <br><br>
+        6- You will be required to pay us a total of 100$ or its equivalent based on your local currency for every action you make on the system, 
+        you will not be able to shut down your system without paying that fee
+        <br><br>
+        7- Only click "PROCEED" if you are completely aware of the terms listed above, otherwise
+        please click the "CLOSE" button at the top left of your screen
+    </span>
+    <div btn="" class="setup-btn" id="setup-proceed">Proceed</div>
+`;
+
+dialogue.push(installation_startPage);
+dialogue.push(instructions);
+dialogue.push("installation-loading");
+
+let index = 0;
+window_.innerHTML = dialogue[index];
+
+initial_setup.appendChild(window_);
 
 function installOS() {
     window.setTimeout(function () {
@@ -359,9 +402,27 @@ function installOS() {
     }, delay * 2)
     window.setTimeout(function () {
         document.body.appendChild(initial_setup);
-        let proceed_btn = document.getElementById("setup-proceed");
-        proceed_btn.onclick = function () {
-            console.log("proceed");
-        }
     }, delay * 2.5)
+}
+
+document.addEventListener("click", function (e) {
+    let targetElement = e.target;
+    if (targetElement.id === "setup-proceed") {
+        index += 1;
+        if (dialogue[index] === "installation-loading") {
+            startInstall();
+        } else if (dialogue[index] === undefined) {
+            index -= 1;
+        } else {
+            window_.innerHTML = dialogue[index];
+        }
+    } else if (targetElement.id === "abort-installation") {
+        installation_corrupted = true;
+        document.body.innerHTML = `ERR`;
+        document.body.style.color = "white";
+    }
+})
+
+function startInstall() {
+    
 }

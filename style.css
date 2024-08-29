@@ -131,7 +131,7 @@ body {
     align-items: center;
 }
 
-.initial-setup .text {
+.window .setup-intro,.window .setup-instructions {
     color: white;
     font-weight: bold;
     font-size: 36px;
@@ -140,6 +140,27 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
+}
+
+.window .setup-instructions {
+    height: 50px;
+}
+
+.text-instructions {
+    height: 300px;
+    width: 100%;
+    padding: 50px;
+    overflow: scroll;
+    color: white;
+    font-size: 18px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    margin-bottom: 10px;
+}
+
+.text-instructions::-webkit-scrollbar {
+    display: none;
 }
 
 [btn] {
@@ -161,4 +182,19 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.close-installation {
+    width: 35px;
+    height: 35px;
+    background-color: red;
+    color: white;
+    font-size: 32px;
+    font-weight: bold;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    top: 20px;
+    right: 20px;
 }
