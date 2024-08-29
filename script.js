@@ -321,8 +321,6 @@ function setColor(i) {
 ////////////////////////////////INSTALLATION BEGINS////////////////////////////////////////////
 
 // GUIDE TO INSTALLATION:
-// install speed will be determined randomly
-// install page containes: loading bar, currently downloading, instructions.
 // when download is completed, the boring loading page is shown
 // user greeted, making settings (username, password, background, profile, etc)
 // one last click before user has full access to the system
@@ -468,6 +466,7 @@ document.addEventListener("click", function (e) {
 function startInstall() {
     window_.innerHTML = "";
     window_.innerHTML = install_page;
+
     let info_col = document.getElementById("info-calc");
     let init_setup = document.getElementById("setup-init");
     let framework = document.getElementById("frmwrk");
@@ -478,14 +477,37 @@ function startInstall() {
     setup_percentage.push(framework);
     setup_percentage.push(stngs);
     setup_percentage.push(ux);
-    for (let i = 0; i < setup_percentage.length; i++) {
+
+    let bar = document.getElementById("bar");
+    bar.width = 0;
+    bar.style.width = 0;
+
+    setup_percentage.forEach(element => {
+        let time;
         let number = 0;
-        let increment = Math.random() / 10;
-        if (number < 1) {
-            window.setTimeout(function () {
-                number += increment;
-                setup_percentage[i].innerHTML = `(${Math.floor(number * 100)}%)`
+        if (time !== undefined) {
+            return;
+        } else {
+            time = setInterval(function () {
+                if (number < 1) {
+                    let increment = Math.random() / 20;
+                    number += increment;
+                    bar.style.width = `${bar.width += (increment * 950) / 5}px`;
+                    element.innerHTML = `(${Math.floor(number * 100)}%)`
+                } else {
+                    bar.style.width = `930px`;
+                    element.innerHTML = `(100%)`
+                    clearInterval(time);
+                    time = undefined;
+                    window.setTimeout(function () {
+                        startOS();
+                    }, 5000);
+                }
             }, 500)
         }
-    }
+    });
+}
+
+function startOS() {
+    window_.innerHTML = "";
 }
