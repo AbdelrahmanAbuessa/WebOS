@@ -1,5 +1,8 @@
 let cmd_content = [];
 
+let username;
+let password;
+
 let installation_corrupted = false;
 
 let dialogue = [];
@@ -320,8 +323,6 @@ function setColor(i) {
 
 ////////////////////////////////INSTALLATION BEGINS////////////////////////////////////////////
 
-// GUIDE TO INSTALLATION:
-// when download is completed, the boring loading page is shown
 // user greeted, making settings (username, password, background, profile, etc)
 // one last click before user has full access to the system
 
@@ -419,6 +420,28 @@ let install_page = `
     </div>
 `
 
+let user_settings_setup = `
+    <div btn="" class="close-installation" id="abort-installation">X</div>
+    <div class="setup-title">Welcome, User!</div>
+    <div class="setup-subtitle">Please set a username and a password to access the system</div>
+    <div class="user-setup">
+        <div class="section">
+            <label for="username">Username: </label>
+            <input type="text" id="username">
+        </div>
+        <div class="section">
+            <label for="n-pass">New Password: </label>
+            <input type="password" id="n-pass">
+        </div>
+        <div class="section">
+            <label for="check-pass">Check Password: </label>
+            <input type="password" id="check-pass">
+        </div>
+        <div btn="" id="confirm-user" class="confirm-user">Confirm</div>
+        <div id="user-error" class="user-error"></div>
+    </div>
+`
+
 dialogue.push(installation_startPage);
 dialogue.push(instructions);
 dialogue.push("installation-loading");
@@ -442,8 +465,6 @@ function installOS() {
         document.body.appendChild(initial_setup);
     }, delay * 2.5)
 }
-
-// startInstall();
 
 document.addEventListener("click", function (e) {
     let targetElement = e.target;
@@ -501,13 +522,64 @@ function startInstall() {
                     time = undefined;
                     window.setTimeout(function () {
                         startOS();
-                    }, 5000);
+                    }, 1000); // remember to change this
                 }
-            }, 500)
+            }, delay) // remember to change this
         }
     });
 }
 
 function startOS() {
-    window_.innerHTML = "";
+    document.body.innerHTML = ""
+    window.setTimeout(function () {
+        document.body.appendChild(startup_loading);
+    }, 1000) // remember to change this
+    window.setTimeout(function () {
+        document.body.innerHTML = "";
+    }, 2000) // remember to change this
+    window.setTimeout(function () {
+        window_.innerHTML = user_settings_setup;
+        document.body.appendChild(initial_setup);
+        userSettings();
+    }, 3000) // remember to change this
+}
+
+function userSettings() {
+    let username_text = document.getElementById("username");
+    let new_password_text = document.getElementById("n-pass");
+    let check_password = document.getElementById("check-pass");
+    let user_error = document.getElementById("user-error");
+    document.addEventListener("click", function (e) {
+        let targetElement = e.target;
+        if (targetElement.id === "confirm-user") {
+            if (username_text.value === "" || new_password_text.value === "" || check_password.value === "") {
+                user_error.innerText = "Please Fill out All Values"
+            } else {
+                if (check_password.value !== new_password_text.value) {
+                    user_error.innerText = "Passwords Do Not Match"
+                } else {
+                    password = check_password.value;
+                    user_error.innerText = "";
+                }
+                username = username_text.value;
+                existing_user = true;
+                window_.innerHTML = `
+                    <div class="setup-title wamed">Welcome, ${capitalize(username)}!</div>
+                    <div class="setup-subtitle wamed">Please Be Patient while we set up your desktop</div>
+                `
+                window.setTimeout(function () {
+                    document.body.innerHTML = "";
+                    desktop();
+                }, 2000) // remember to change this 
+            }
+        }
+    })
+}
+
+function capitalize(string) {
+    return string[0].toUpperCase() + string.substr(1, string.length - 1);
+}
+
+function desktop() {
+    console.log("load-desktop");
 }

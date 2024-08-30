@@ -261,3 +261,78 @@ li {
     background-color: green;
     border-radius: 25px;
 }
+
+.setup-title {
+    color: white;
+    font-size: 36px;
+    font-weight: bold;
+}
+
+.setup-subtitle {
+    color: white;
+    font-size: 26px;
+}
+
+.section {
+    width: 500px;
+    margin-top: 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.section label {
+    color: white;
+    font-size: 20px;
+}
+
+.confirm-user {
+    width: 150px;
+    height: 50px;
+    color: white;
+    background-color: #092642;
+    font-size: 24px;
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    margin-top: 100px;
+}
+
+.section input {
+    width: 300px;
+    font-size: 20px;
+    border: none;
+    outline: none;
+    background-color: #092642;
+    border-radius: 10px;
+    padding: 10px;
+    color: white;
+}
+
+.user-error {
+    color: maroon;
+    font-size: 18px;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.wamed {
+    animation-name: wamed;
+    animation-duration: 5s;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+}
+
+@keyframes wamed {
+    0% {
+        opacity: 0.3;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0.3;
+    }
+}
