@@ -2,6 +2,8 @@ let cmd_content = [];
 
 let running_apps = [];
 
+let app_display = document.getElementById("open-apps");
+
 let username;
 let password;
 
@@ -722,18 +724,44 @@ function createDesktop() {
     }
 }
 
-function startApp(id) {
-    if (running_apps.indexOf(id) < 0) {
+function startApp(idm) {
+    if (running_apps.indexOf(idm) < 0) {
+        running_apps.push(idm);
+        
+        loadApps();
+        
+        document.addEventListener("click", function (e) {
+            let targetElement = e.target;
+            if (targetElement.id === "close") {
+                let window = targetElement.getAttribute("window-name");
+                for (let i = 0; i < running_apps.length; i++) {
+                    if (running_apps[i] === window) {
+                        running_apps.splice(i, 1);
+                    }
+                }
+                loadApps();
+            }
+        })
+    }
+}
+
+function loadApps() {
+    app_display.innerHTML = "";
+    for (let i = 0; i < running_apps.length; i++) {
         let window = document.createElement("div");
         window.className = "app-window";
-        window.setAttribute("window-name", id);
+        window.setAttribute("window-name", running_apps[i]);
+        window.setAttribute("draggable", "true");
+        window.addEventListener("dragstart", function (e) {
+            e.dataTransfer.setData("text/html", window)
+        })
         window.innerHTML = `
-            <div class="opt-bar" id="${id}">
+            <div class="opt-bar" id="${running_apps[i]}">
                 <div class="window-title" id="window-title">
-                    ${capitalize(id)}
+                    ${capitalize(running_apps[i])}
                 </div>
                 <div class="opt">
-                    <div class="opt-btn opt-close" id="close">X</div>
+                    <div class="opt-btn opt-close" id="close" window-name="${running_apps[i]}">X</div>
                 </div>
             </div>
             <div class="app">
@@ -741,20 +769,12 @@ function startApp(id) {
                     <div class="save" id="save">Save</div>
                 </div>
                 <div class="app-function" id="function">
-
+    
                 </div>
             </div>
         `
-        running_apps.push(id);
-        
-        loadApps();
-        
-        document.addEventListener("click", function (e) {
-            let targetElement = e.target;
-            if (targetElement.id === "close") {
-                running_apps.splice(running_apps.indexOf(id), 1);
-                loadApps();
-            }
-        })
+        window.style.top = `calc(${i * 15}px * 3)`;
+        window.style.left = `calc(${i * 15}px * 3)`;
+        app_display.appendChild(window);
     }
 }

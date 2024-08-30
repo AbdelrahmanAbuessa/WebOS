@@ -433,6 +433,7 @@ li {
     background-color: rgba(0, 0, 0, 0.6);
     border-radius: 15px;
     padding: 10px;
+    z-index: 999;
 }
 
 .menu-section {
@@ -551,4 +552,10 @@ li {
 
 .save:hover {
     background-color: gray;
+}
+
+.open-apps {
+    width: 100%;
+    height: 100%;
+    position: absolute;
 }
