@@ -323,9 +323,6 @@ function setColor(i) {
 
 ////////////////////////////////INSTALLATION BEGINS////////////////////////////////////////////
 
-// user greeted, making settings (username, password, background, profile, etc)
-// one last click before user has full access to the system
-
 let startup_loading = document.createElement("div");
 startup_loading.className = "os";
 startup_loading.innerHTML = 
@@ -452,134 +449,141 @@ window_.innerHTML = dialogue[index];
 initial_setup.appendChild(window_);
 
 function installOS() {
-    window.setTimeout(function () {
-        document.body.innerHTML = "";
-    }, delay / 2)
-    window.setTimeout(function () {
-        document.body.appendChild(startup_loading);
-    }, delay);
-    window.setTimeout(function () {
-        document.body.innerHTML = "";
-    }, delay * 2)
-    window.setTimeout(function () {
-        document.body.appendChild(initial_setup);
-    }, delay * 2.5)
+    // window.setTimeout(function () {
+    //     document.body.innerHTML = "";
+    // }, delay / 2)
+    // window.setTimeout(function () {
+    //     document.body.appendChild(startup_loading);
+    // }, delay);
+    // window.setTimeout(function () {
+    //     document.body.innerHTML = "";
+    // }, delay * 2)
+    // window.setTimeout(function () {
+    //     document.body.appendChild(initial_setup);
+    // }, delay * 2.5)
 }
 
-document.addEventListener("click", function (e) {
-    let targetElement = e.target;
-    if (targetElement.id === "setup-proceed") {
-        index += 1;
-        if (dialogue[index] === "installation-loading") {
-            startInstall();
-        } else if (dialogue[index] === undefined) {
-            index -= 1;
-        } else {
-            window_.innerHTML = dialogue[index];
-        }
-    } else if (targetElement.id === "abort-installation") {
-        installation_corrupted = true;
-        document.body.innerHTML = `ERR`;
-        document.body.style.color = "white";
-    }
-})
 
-function startInstall() {
-    window_.innerHTML = "";
-    window_.innerHTML = install_page;
+// document.addEventListener("click", function (e) {
+    //     let targetElement = e.target;
+    //     if (targetElement.id === "setup-proceed") {
+        //         index += 1;
+//         if (dialogue[index] === "installation-loading") {
+//             startInstall();
+//         } else if (dialogue[index] === undefined) {
+//             index -= 1;
+//         } else {
+//             window_.innerHTML = dialogue[index];
+//         }
+//     } else if (targetElement.id === "abort-installation") {
+//         installation_corrupted = true;
+//         document.body.innerHTML = `ERR`;
+//         document.body.style.color = "white";
+//     }
+// })
 
-    let info_col = document.getElementById("info-calc");
-    let init_setup = document.getElementById("setup-init");
-    let framework = document.getElementById("frmwrk");
-    let stngs = document.getElementById("settings");
-    let ux = document.getElementById("ux");
-    setup_percentage.push(info_col);
-    setup_percentage.push(init_setup);
-    setup_percentage.push(framework);
-    setup_percentage.push(stngs);
-    setup_percentage.push(ux);
+// function startInstall() {
+//     window_.innerHTML = "";
+//     window_.innerHTML = install_page;
 
-    let bar = document.getElementById("bar");
-    bar.width = 0;
-    bar.style.width = 0;
+//     let info_col = document.getElementById("info-calc");
+//     let init_setup = document.getElementById("setup-init");
+//     let framework = document.getElementById("frmwrk");
+//     let stngs = document.getElementById("settings");
+//     let ux = document.getElementById("ux");
+//     setup_percentage.push(info_col);
+//     setup_percentage.push(init_setup);
+//     setup_percentage.push(framework);
+//     setup_percentage.push(stngs);
+//     setup_percentage.push(ux);
 
-    setup_percentage.forEach(element => {
-        let time;
-        let number = 0;
-        if (time !== undefined) {
-            return;
-        } else {
-            time = setInterval(function () {
-                if (number < 1) {
-                    let increment = Math.random() / 20;
-                    number += increment;
-                    bar.style.width = `${bar.width += (increment * 950) / 5}px`;
-                    element.innerHTML = `(${Math.floor(number * 100)}%)`
-                } else {
-                    bar.style.width = `930px`;
-                    element.innerHTML = `(100%)`
-                    clearInterval(time);
-                    time = undefined;
-                    window.setTimeout(function () {
-                        startOS();
-                    }, 1000); // remember to change this
-                }
-            }, delay) // remember to change this
-        }
-    });
-}
+//     let bar = document.getElementById("bar");
+//     bar.width = 0;
+//     bar.style.width = 0;
 
-function startOS() {
-    document.body.innerHTML = ""
-    window.setTimeout(function () {
-        document.body.appendChild(startup_loading);
-    }, 1000) // remember to change this
-    window.setTimeout(function () {
-        document.body.innerHTML = "";
-    }, 2000) // remember to change this
-    window.setTimeout(function () {
-        window_.innerHTML = user_settings_setup;
-        document.body.appendChild(initial_setup);
-        userSettings();
-    }, 3000) // remember to change this
-}
+//     setup_percentage.forEach(element => {
+//         let time;
+//         let number = 0;
+//         if (time !== undefined) {
+//             return;
+//         } else {
+//             time = setInterval(function () {
+//                 if (number < 1) {
+//                     let increment = Math.random() / 20;
+//                     number += increment;
+//                     bar.style.width = `${bar.width += (increment * 950) / 5}px`;
+//                     element.innerHTML = `(${Math.floor(number * 100)}%)`
+//                 } else {
+//                     bar.style.width = `930px`;
+//                     element.innerHTML = `(100%)`
+//                     clearInterval(time);
+//                     time = undefined;
+//                     window.setTimeout(function () {
+//                         startOS();
+//                     }, 1000); // remember to change this
+//                 }
+//             }, delay) // remember to change this
+//         }
+//     });
+// }
 
-function userSettings() {
-    let username_text = document.getElementById("username");
-    let new_password_text = document.getElementById("n-pass");
-    let check_password = document.getElementById("check-pass");
-    let user_error = document.getElementById("user-error");
-    document.addEventListener("click", function (e) {
-        let targetElement = e.target;
-        if (targetElement.id === "confirm-user") {
-            if (username_text.value === "" || new_password_text.value === "" || check_password.value === "") {
-                user_error.innerText = "Please Fill out All Values"
-            } else {
-                if (check_password.value !== new_password_text.value) {
-                    user_error.innerText = "Passwords Do Not Match"
-                } else {
-                    password = check_password.value;
-                    user_error.innerText = "";
-                }
-                username = username_text.value;
-                existing_user = true;
-                window_.innerHTML = `
-                    <div class="setup-title wamed">Welcome, ${capitalize(username)}!</div>
-                    <div class="setup-subtitle wamed">Please Be Patient while we set up your desktop</div>
-                `
-                window.setTimeout(function () {
-                    document.body.innerHTML = "";
-                    desktop();
-                }, 2000) // remember to change this 
-            }
-        }
-    })
-}
+// function startOS() {
+//     document.body.innerHTML = ""
+//     window.setTimeout(function () {
+//         document.body.appendChild(startup_loading);
+//     }, 1000) // remember to change this
+//     window.setTimeout(function () {
+//         document.body.innerHTML = "";
+//     }, 2000) // remember to change this
+//     window.setTimeout(function () {
+//         window_.innerHTML = user_settings_setup;
+//         document.body.appendChild(initial_setup);
+//         userSettings();
+//     }, 3000) // remember to change this
+// }
 
-function capitalize(string) {
-    return string[0].toUpperCase() + string.substr(1, string.length - 1);
-}
+// function userSettings() {
+//     let username_text = document.getElementById("username");
+//     let new_password_text = document.getElementById("n-pass");
+//     let check_password = document.getElementById("check-pass");
+//     let user_error = document.getElementById("user-error");
+//     document.addEventListener("click", function (e) {
+//         let targetElement = e.target;
+//         if (targetElement.id === "confirm-user") {
+//             if (username_text.value === "" || new_password_text.value === "" || check_password.value === "") {
+//                 user_error.innerText = "Please Fill out All Values"
+//             } else {
+//                 if (check_password.value !== new_password_text.value) {
+//                     user_error.innerText = "Passwords Do Not Match"
+//                 } else {
+//                     password = check_password.value;
+//                     user_error.innerText = "";
+//                 }
+//                 username = username_text.value;
+//                 existing_user = true;
+//                 window_.innerHTML = `
+//                     <div class="setup-title wamed">Welcome, ${capitalize(username)}!</div>
+//                     <div class="setup-subtitle wamed">Please Be Patient while we set up your desktop</div>
+//                 `
+//                 window.setTimeout(function () {
+//                     document.body.innerHTML = "";
+//                     desktop();
+//                 }, 2000) // remember to change this 
+//             }
+//         }
+//     })
+// }
+
+// function capitalize(string) {
+//     return string[0].toUpperCase() + string.substr(1, string.length - 1);
+// }
+
+desktop();
+
+let desktop_content = `
+
+`
 
 function desktop() {
-    console.log("load-desktop");
+    
 }
