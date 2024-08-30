@@ -385,9 +385,9 @@ li {
     width: 100px;
     height: 100px;
     margin: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    display: grid;
+    place-content: center;
+    text-align: center;
     cursor: pointer;
     font-size: 20px;
 }
@@ -470,4 +470,8 @@ li {
     justify-content: center;
     align-items: center;
     border-radius: 7px;
+}
+
+.subfile-name {
+    font-size: 16px;
 }

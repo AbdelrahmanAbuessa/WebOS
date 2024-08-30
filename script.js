@@ -574,16 +574,141 @@ function installOS() {
 //     })
 // }
 
-// function capitalize(string) {
-//     return string[0].toUpperCase() + string.substr(1, string.length - 1);
-// }
+function capitalize(string) {
+    return string[0].toUpperCase() + string.substr(1, string.length - 1);
+}
 
-desktop();
+let desktop = document.createElement("div")
+desktop.className = "desktop";
 
-let desktop_content = `
+//////////////////////////////INITIATE DESKTOP///////////////////////////////
+// same as usual, desltop contents are loaded from a variable
+// each program / file there is, will be loaded onto the desktop from an array where it is saved
+// each program will have an id, marking their location on the desktop / start menu
+// each program / file will have another special id, that will mark what the data stored inside them is
+// each program and file, when opened, will create a moveable window, with a bar at the top, containing
+// minimize, maximize, and close
+// each open program will appear on the task bar, clicking the minimize btn or the icon on the task bar
+// will cause the program to toggle visibility
+// list of possible programs i can make from this:
+// 1- notepad
+// 2- paint
+// 3- calculator
+// 4- settings
+// 5- cmd 
+// 6- file explorer
+// creating a folder means creating an array, same way as file explorer will work.
+// right click to create a folder, rename one, or delete one.
+// deleting anything will cause its permanent death forever
 
+desktop.innerHTML = `
+    <div class="main-screen">
+        <div class="os-desktop">JavaScript OS</div>
+        <div class="desktop-icons" id="desktop-programs">
+            
+        </div>
+    </div>
+    <div class="taskbar">
+        <div class="start-menu-btn" id="open-start">Start</div>
+        <div class="dt">
+            <div class="time" id="time">12:60 PM</div>
+            <div class="date" id="date">8/6/2024</div>
+        </div>
+    </div>
+    <div class="start-menu" id="start">
+        <div id="container">
+            <div class="menu-section">
+                <div class="start-icon">F</div>
+                <div class="text">File explorer</div>
+            </div>
+            <div class="menu-section">
+                <div class="start-icon">F</div>
+                <div class="text">File explorer</div>
+            </div>
+            <div class="menu-section">
+                <div class="start-icon">F</div>
+                <div class="text">File explorer</div>
+            </div>
+        </div>
+        <div btn="" class="menu-btn" id="shutdown">Shutdown</div>
+    </div>
 `
 
-function desktop() {
+let notepad = new Object({
+    program: "notepad",
+})
+
+let paint = new Object({
+    program: "paint",
+})
+
+let calc = new Object({
+    program: "calc",
+})
+
+let settings = new Object({
+    program: "settings",
+})
+
+let cmd = new Object({
+    program: "cmd",
+})
+
+let exp = new Object({
+    program: "exp",
+})
+
+let desktop_programs = [exp, notepad, paint, calc];
+let start_programs = [cmd, settings, exp, notepad, paint, calc];
+
+createDesktop();
+
+function createDesktop() {
+    document.body.appendChild(desktop);
     
+    let start_menu = document.getElementById("start");
+    start_menu.style.display = "none";
+    
+    let start_menu_programs = document.getElementById("container");
+    start_menu_programs.innerHTML = "";
+
+    let desktop_shortcuts = document.getElementById("desktop-programs");
+    desktop_shortcuts.innerHTML = "";
+
+    start_programs.forEach(item => {
+        let shortcut = document.createElement("div");
+        shortcut.className = "menu-section";
+        shortcut.setAttribute("program", "");
+        shortcut.id = item.program;
+        shortcut.innerHTML = `
+            <div class="start-icon">${capitalize(item.program[0])}</div>
+            <div class="text">${capitalize(item.program)}</div>
+        `
+        start_menu_programs.appendChild(shortcut);
+    });
+    
+    desktop_programs.forEach(item => {
+        let shortcut = document.createElement("div");
+        shortcut.className = "icon";
+        shortcut.id = item.program;
+        shortcut.setAttribute("program", "");
+        shortcut.innerHTML = `
+            <div>${capitalize(item.program[0])}</div>
+            <div class="subfile-name">${capitalize(item.program)}</div>
+        `
+        desktop_shortcuts.appendChild(shortcut);
+    });
+
+    let start_btn = document.getElementById("open-start");
+    let toggle_start_menu = 0; 
+
+    start_btn.onclick = function () {
+        if (toggle_start_menu === 0) {
+            toggle_start_menu = 1;
+            start_menu.style.display = "block";
+        } else if (toggle_start_menu === 1) {
+            toggle_start_menu = 0;
+            start_menu.style.display = "none";
+        }
+    }
 }
