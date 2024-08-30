@@ -590,8 +590,7 @@ desktop.className = "desktop";
 // each program / file there is, will be loaded onto the desktop from an array where it is saved
 // each program will have an id, marking their location on the desktop / start menu
 // each program / file will have another special id, that will mark what the data stored inside them is
-// each program and file, when opened, will create a moveable window, with a bar at the top, containing
-// minimize, maximize, and close
+
 // each open program will appear on the task bar, clicking the minimize btn or the icon on the task bar
 // will cause the program to toggle visibility
 // list of possible programs i can make from this:
@@ -724,44 +723,62 @@ function createDesktop() {
     }
 }
 
+let initialX = 0;
+let initialY = 0;
+
 function startApp(idm) {
     if (running_apps.indexOf(idm) < 0) {
-        running_apps.push(idm);
+        
+        let window_obj = new Object({
+            window_name: idm,
+            posX: initialX,
+            posY: initialY,
+            drag: false,
+        })
+
+        running_apps.push(window_obj);
         
         loadApps();
-        
-        document.addEventListener("click", function (e) {
-            let targetElement = e.target;
-            if (targetElement.id === "close") {
-                let window = targetElement.getAttribute("window-name");
-                for (let i = 0; i < running_apps.length; i++) {
-                    if (running_apps[i] === window) {
-                        running_apps.splice(i, 1);
-                    }
-                }
-                loadApps();
-            }
-        })
     }
 }
+
+document.addEventListener("click", function (e) {
+    let targetElement = e.target;
+    if (targetElement.id === "close") {
+        let window = targetElement.getAttribute("window-name");
+        for (let i = 0; i < running_apps.length; i++) {
+            if (running_apps[i].window_name === window) {
+                running_apps.splice(i, 1);
+            }
+        }
+        loadApps();
+    } else if (targetElement.id === "save") {
+        for (let i = 0; i < running_apps.length; i++) {
+            if (running_apps[i].window_name === "notepad") {
+                saveNotePad();
+            }
+        }
+    }
+})
+
+let drag;
+let mouseX;
+let mouseY;
 
 function loadApps() {
     app_display.innerHTML = "";
     for (let i = 0; i < running_apps.length; i++) {
-        let window = document.createElement("div");
-        window.className = "app-window";
-        window.setAttribute("window-name", running_apps[i]);
-        window.setAttribute("draggable", "true");
-        window.addEventListener("dragstart", function (e) {
-            e.dataTransfer.setData("text/html", window)
-        })
-        window.innerHTML = `
-            <div class="opt-bar" id="${running_apps[i]}">
+        let window_content = document.createElement("div");
+        window_content.className = "app-window";
+        window_content.setAttribute("window-name", running_apps[i].window_name);
+        window_content.setAttribute("draggable", "true");
+        window_content.innerHTML = `
+            <div class="opt-bar" id="${running_apps[i].window_name}">
                 <div class="window-title" id="window-title">
-                    ${capitalize(running_apps[i])}
+                    ${capitalize(running_apps[i].window_name)}
                 </div>
                 <div class="opt">
-                    <div class="opt-btn opt-close" id="close" window-name="${running_apps[i]}">X</div>
+                    <div class="opt-btn opt-close" id="close" window-name="${running_apps[i].window_name}">X</div>
                 </div>
             </div>
             <div class="app">
@@ -769,12 +786,58 @@ function loadApps() {
                     <div class="save" id="save">Save</div>
                 </div>
                 <div class="app-function" id="function">
-    
+                    ${addFunction(running_apps[i].window_name)}
                 </div>
             </div>
         `
-        window.style.top = `calc(${i * 15}px * 3)`;
-        window.style.left = `calc(${i * 15}px * 3)`;
-        app_display.appendChild(window);
+
+        window_content.style.top = running_apps[i].posY;
+        window_content.style.left = running_apps[i].posX;
+
+        window_content.onclick = function (e) {
+            window_content.style.zIndex += 9;
+        }
+        
+        window_content.addEventListener('mousedown', function (e) {
+            offsetX = e.clientX - window_content.getBoundingClientRect().left;
+            offsetY = e.clientY - window_content.getBoundingClientRect().top;
+            running_apps[i].drag = true;
+            window_content.style.zIndex += 9;
+        });
+
+        document.addEventListener('mousemove', function (e) {
+            if (running_apps[i].drag) {
+                running_apps[i].posX = `${e.clientX - offsetX}px`;
+                running_apps[i].posY = `${e.clientY - offsetY}px`;
+                window_content.style.left = running_apps[i].posX;
+                window_content.style.top = running_apps[i].posY;
+            }
+        });
+        
+        window_content.addEventListener('mouseup', function () {
+            running_apps[i].drag = false;
+        });
+
+        app_display.appendChild(window_content);
     }
+}
+
+function saveNotePad() {
+    
+}
+
+function addFunction(type) {
+    if (type === "notepad") {
+        return `
+            <textarea name="notepad" id="notepad" class="notepad" rows="20">
+            
+            </textarea>
+        `;
+    }
+    // exp
+    // calc
+    // notepad
+    // cmd
+    // paint
+    // settings
 }
