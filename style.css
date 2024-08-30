@@ -475,3 +475,80 @@ li {
 .subfile-name {
     font-size: 16px;
 }
+
+.app-window {
+    width: 500px;
+    height: 300px;
+    position: absolute;
+    z-index: 2;
+    top: 0;
+}
+
+.opt-bar {
+    width: 100%;
+    height: 35px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #092642;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.opt-btn {
+    width: 25px;
+    height: 25px;
+    background-color: #0078D4;
+    margin: 3px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.opt-btn:hover {
+    opacity: 0.6;
+}
+
+.opt-close {
+    background-color: red;
+}
+
+.window-title {
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.opt {
+    display: flex;
+}
+
+.app {
+    width: 100%;
+    height: calc(100% - 35px);
+    background-color: white;
+}
+
+.action-bar {
+    width: 100%;
+    height: 20px;
+    background-color: lightgray;
+}
+
+.save {
+    width: 40px;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.save:hover {
+    background-color: gray;
+}

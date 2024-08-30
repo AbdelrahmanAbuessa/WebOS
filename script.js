@@ -1,5 +1,7 @@
 let cmd_content = [];
 
+let running_apps = [];
+
 let username;
 let password;
 
@@ -699,6 +701,13 @@ function createDesktop() {
         desktop_shortcuts.appendChild(shortcut);
     });
 
+    document.addEventListener("click", function (e) {
+        let targetElement = e.target;
+        if (targetElement.hasAttribute("program")) {
+            startApp(targetElement.id);
+        }
+    })
+
     let start_btn = document.getElementById("open-start");
     let toggle_start_menu = 0; 
 
@@ -710,5 +719,42 @@ function createDesktop() {
             toggle_start_menu = 0;
             start_menu.style.display = "none";
         }
+    }
+}
+
+function startApp(id) {
+    if (running_apps.indexOf(id) < 0) {
+        let window = document.createElement("div");
+        window.className = "app-window";
+        window.setAttribute("window-name", id);
+        window.innerHTML = `
+            <div class="opt-bar" id="${id}">
+                <div class="window-title" id="window-title">
+                    ${capitalize(id)}
+                </div>
+                <div class="opt">
+                    <div class="opt-btn opt-close" id="close">X</div>
+                </div>
+            </div>
+            <div class="app">
+                <div class="action-bar">
+                    <div class="save" id="save">Save</div>
+                </div>
+                <div class="app-function" id="function">
+
+                </div>
+            </div>
+        `
+        running_apps.push(id);
+        
+        loadApps();
+        
+        document.addEventListener("click", function (e) {
+            let targetElement = e.target;
+            if (targetElement.id === "close") {
+                running_apps.splice(running_apps.indexOf(id), 1);
+                loadApps();
+            }
+        })
     }
 }
