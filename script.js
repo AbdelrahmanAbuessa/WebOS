@@ -637,6 +637,15 @@ desktop.innerHTML = `
     </div>
 `
 
+let notepad_saves = [];
+
+// notepad save:
+// add item to desktop programs
+// add content to a seperate array
+// when running, get the index
+// calculate the index in the seperate array
+// load content
+
 let notepad = new Object({
     program: "notepad",
 })
@@ -705,7 +714,7 @@ function createDesktop() {
     document.addEventListener("click", function (e) {
         let targetElement = e.target;
         if (targetElement.hasAttribute("program")) {
-            startApp(targetElement.id);
+            startApp(targetElement);
         }
     })
 
@@ -726,11 +735,13 @@ function createDesktop() {
 let initialX = 0;
 let initialY = 0;
 
-function startApp(idm) {
-    if (running_apps.indexOf(idm) < 0) {
+function startApp(element) {
+    let window_obj;
+
+    if (running_apps.indexOf(element) < 0) {
         
-        let window_obj = new Object({
-            window_name: idm,
+        window_obj = new Object({
+            window_name: element.id,
             posX: initialX,
             posY: initialY,
             drag: false,
@@ -786,7 +797,7 @@ function loadApps() {
                     <div class="save" id="save">Save</div>
                 </div>
                 <div class="app-function" id="function">
-                    ${addFunction(running_apps[i].window_name)}
+                    ${addFunction(running_apps[i])}
                 </div>
             </div>
         `
@@ -806,11 +817,13 @@ function loadApps() {
         });
 
         document.addEventListener('mousemove', function (e) {
-            if (running_apps[i].drag) {
-                running_apps[i].posX = `${e.clientX - offsetX}px`;
-                running_apps[i].posY = `${e.clientY - offsetY}px`;
-                window_content.style.left = running_apps[i].posX;
-                window_content.style.top = running_apps[i].posY;
+            if (running_apps.length > 0) {
+                if (running_apps[i].drag) {
+                    running_apps[i].posX = `${e.clientX - offsetX}px`;
+                    running_apps[i].posY = `${e.clientY - offsetY}px`;
+                    window_content.style.left = running_apps[i].posX;
+                    window_content.style.top = running_apps[i].posY;
+                }
             }
         });
         
@@ -823,14 +836,34 @@ function loadApps() {
 }
 
 function saveNotePad() {
-    
+    let textarea = document.getElementById("notepad_write");
+    let notepad_file = new Object({
+        program: `notepad-save-${desktop_programs.length - 4}`,
+    })
+    notepad_saves.push(textarea.value);
+    desktop_programs.push(notepad_file);
+    createDesktop();
 }
 
 function addFunction(type) {
-    if (type === "notepad") {
+    if (type.window_name === "notepad") {
         return `
-            <textarea name="notepad" id="notepad" class="notepad" rows="20">
+            <textarea name="notepad" id="notepad_write" class="notepad" rows="20">
             
+            </textarea>
+        `;
+    } else if (type.window_name.indexOf("notepad-save") > -1) {
+        let notepad_content;
+
+        for (let i = 0; i < desktop_programs.length; i++) {
+            if (type.window_name === desktop_programs[i].program) {
+                notepad_content = notepad_saves[i - 4];
+            }
+        }
+
+        return `
+            <textarea name="notepad" id="notepad_write" class="notepad" rows="20">
+                ${notepad_content}
             </textarea>
         `;
     }
