@@ -40,9 +40,38 @@ window.onload = function () {
     }
 }
 
+let pass_field;
+let pass_warning;
+
+document.addEventListener("click", function (e) {
+    let targetElement = e.target;
+    if (targetElement.id === "login") {
+        if (pass_field.value === password) {
+            createDesktop();
+        } else {
+            pass_warning.style.display = "block"
+        }
+    }
+})
+
 function loginPage() {
     document.body.innerHTML = "";
-    // document.
+    document.body.innerHTML = `
+    <div class="initial-setup">
+    <div class="window">
+    <div class="text setup-intro">Welcome Back, ${username}</div>
+    <input type="password" class="login-pass" placeholder="Enter Password" name="login-pass" id="login-pass">
+    <div btn="" id="login" class="login">Login</div>
+    <div id="password-warning" class="pass-warning">Password is Incorrect</div>
+    </div>
+    </div>
+    `;
+    
+    pass_warning = document.getElementById("password-warning");
+    pass_warning.style.display = "none";
+
+    pass_field = document.getElementById("login-pass");
+
 }
 
 let cmd_content = [];
@@ -53,7 +82,7 @@ let dialogue = [];
 
 let setup_percentage = [];
 
-let delay = 0;
+let delay = 1000;
 
 let instal_terminal_window = document.createElement("div");
 instal_terminal_window.className = "installation-terminal-window"
@@ -878,7 +907,7 @@ function shutdown() {
         document.body.innerHTML = "";
     }, 3000); // change this
     window.setTimeout(function () {
-        // window.close();
+        window.close();
         console.log("window-closed");
     }, 6000); // change this
 }
@@ -1079,5 +1108,4 @@ function addFunction(type) {
     }
 }
 
-// Things yet to do:
-// 1- add icons to desktop (make it prettier)
+// done :D
