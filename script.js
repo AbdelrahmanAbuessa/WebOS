@@ -23,7 +23,6 @@ if (existing_user) {
 } else {
     // document.body.innerHTML = "";
     // loadCMD(null);
-    installOS();
 }
 
 document.addEventListener("keypress", function (e) {
@@ -192,7 +191,7 @@ function loadCMD(action, string) {
     } else if (action === "mohemmat") {
         cmd_guide_text = `ALL HAIL OUR CREATOR, THE MOST POWERFUL, THE MOST BEAUTIFUL, ALL HAIL MOHEMMAT`;
     } else if (action === "bluey") {
-        cmd_guide_text = `bluey mentioned :banditdance: :patjamming: :bingoYEAH: :blueythumbsup:`;
+        cmd_guide_text = `bluey mentioned :banditdance: :chillistare: :bingoYEAH: :blueythumbsup:`;
     }
 
     let cmd_guide = new Object({
@@ -465,7 +464,6 @@ function installOS() {
     // }, delay * 2.5)
 }
 
-
 document.addEventListener("click", function (e) {
         let targetElement = e.target;
         if (targetElement.id === "setup-proceed") {
@@ -585,10 +583,6 @@ desktop.className = "desktop";
 
 //////////////////////////////INITIATE DESKTOP///////////////////////////////
 
-// each open program will appear on the task bar, clicking the minimize btn or the icon on the task bar
-// will cause the program to toggle visibility
-// 5- cmd
-
 desktop.innerHTML = `
     <div class="main-screen">
         <div class="os-desktop">JavaScript OS</div>
@@ -640,12 +634,8 @@ let settings = new Object({
     program: "settings",
 })
 
-let cmd = new Object({
-    program: "cmd",
-})
-
 let desktop_programs = [notepad, paint, calc];
-let start_programs = [cmd, settings, notepad, paint, calc];
+let start_programs = [settings, notepad, paint, calc];
 
 let app_display = document.createElement("div");
 app_display.className = "open-apps";
@@ -660,10 +650,63 @@ document.addEventListener("click", function (e) {
 
 createDesktop();
 
+function updateTime(t, d) {
+    let time = new Date();
+    let hr = time.getHours();
+    let min = time.getMinutes();
+    let sec = time.getSeconds();
+    let yr = time.getFullYear();
+    let mnth = time.getMonth();
+    let date = time.getDate();
+    let day = time.getDay();
+    let h;
+    switch (day) {
+        case 1:
+            day = "Monday";
+            break;
+        case 2:
+            day = "Tuesday";
+            break;
+        case 3:
+            day = "Wednesday";
+            break;
+        case 4:
+            day = "Thursday";
+            break;
+        case 5:
+            day = "Friday";
+            break;
+        case 6:
+            day = "Saturday";
+            break;
+        case 7:
+            day = "Sunday";
+            break;
+    }
+    if (hr > 11) {
+        h = "PM";
+    } else {
+        h = "AM";
+    }
+    if (min < 10) {
+        min = "0" + min;
+    }
+    if (sec < 10) {
+        sec = "0" + sec;
+    }
+    t.innerHTML = `${hr}:${min}:${sec} ${h}`;
+    d.innerHTML = `${day} ${date} / ${mnth + 1} / ${yr}`;
+}
+
 function createDesktop() {
     document.body.innerHTML = "";
     document.body.appendChild(app_display);
     document.body.appendChild(desktop);
+
+    let time_display = document.getElementById("time");
+    let date_display = document.getElementById("date");
+
+    window.setInterval(updateTime, 1000, time_display, date_display)
 
     let start_menu = document.getElementById("start");
     start_menu.style.display = "none";
@@ -790,10 +833,37 @@ document.addEventListener("click", function (e) {
         } else {
             deleteData();
         }
+    } else if (targetElement.id === "shutdown") {
+        shutdown();
     }
 })
 
+function shutdown() {
+
+    // Add localStorage saving Here
+
+    document.body.innerHTML = "";
+
+    document.body.innerHTML = `
+        <div class="initial-setup">
+            <div class="window">
+                <span class="text setup-intro">Shutting Down</span>
+            </div>
+        </div>
+    `
+
+    window.setTimeout(function () {
+        document.body.innerHTML = "";
+    }, 3000); // change this
+    window.setTimeout(function () {
+        window.close();
+    }, 6000); // change this
+}
+
 function deleteData() {
+
+    // Add localStorage deleting here
+
     console.log("deleting all data");
 }
 
@@ -986,7 +1056,9 @@ function addFunction(type) {
                 </div>
             </div>
         `
-    } else if (type.window_name === "cmd") {
-        loadCMD(null);
     }
 }
+
+// Things yet to do:
+// 1- add icons to desktop (make it prettier)
+// 5- add localstorage (storing notepad files, user&pass, err)

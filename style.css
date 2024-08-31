@@ -21,6 +21,7 @@ body {
     left: 50%;
     transform: translate(-50%, -50%);
     overflow: scroll;
+    background-color: black;
 }
 
 .installation-terminal-window::-webkit-scrollbar {
@@ -415,7 +416,7 @@ li {
 }
 
 .dt {
-    width: 100px;
+    width: 220px;
     height: 100%;
     background-color: #092642;
     display: grid;
