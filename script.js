@@ -2,8 +2,6 @@ let cmd_content = [];
 
 let running_apps = [];
 
-let app_display = document.getElementById("open-apps");
-
 let username;
 let password;
 
@@ -586,15 +584,10 @@ let desktop = document.createElement("div")
 desktop.className = "desktop";
 
 //////////////////////////////INITIATE DESKTOP///////////////////////////////
-// same as usual, desltop contents are loaded from a variable
-// each program / file there is, will be loaded onto the desktop from an array where it is saved
-// each program will have an id, marking their location on the desktop / start menu
-// each program / file will have another special id, that will mark what the data stored inside them is
 
 // each open program will appear on the task bar, clicking the minimize btn or the icon on the task bar
 // will cause the program to toggle visibility
 // list of possible programs i can make from this:
-// 1- notepad
 // 2- paint
 // 3- calculator
 // 4- settings
@@ -639,13 +632,6 @@ desktop.innerHTML = `
 
 let notepad_saves = [];
 
-// notepad save:
-// add item to desktop programs
-// add content to a seperate array
-// when running, get the index
-// calculate the index in the seperate array
-// load content
-
 let notepad = new Object({
     program: "notepad",
 })
@@ -673,9 +659,15 @@ let exp = new Object({
 let desktop_programs = [exp, notepad, paint, calc];
 let start_programs = [cmd, settings, exp, notepad, paint, calc];
 
+let app_display = document.createElement("div");
+app_display.className = "open-apps";
+app_display.id = "open-apps";
+
 createDesktop();
 
 function createDesktop() {
+    document.body.innerHTML = "";
+    document.body.appendChild(app_display);
     document.body.appendChild(desktop);
     
     let start_menu = document.getElementById("start");
@@ -683,7 +675,7 @@ function createDesktop() {
     
     let start_menu_programs = document.getElementById("container");
     start_menu_programs.innerHTML = "";
-
+    
     let desktop_shortcuts = document.getElementById("desktop-programs");
     desktop_shortcuts.innerHTML = "";
 
@@ -742,13 +734,10 @@ function startApp(element) {
         
         window_obj = new Object({
             window_name: element.id,
-            posX: initialX,
-            posY: initialY,
-            drag: false,
+            id: running_apps.length,
         })
 
         running_apps.push(window_obj);
-        
         loadApps();
     }
 }
@@ -756,13 +745,8 @@ function startApp(element) {
 document.addEventListener("click", function (e) {
     let targetElement = e.target;
     if (targetElement.id === "close") {
-        let window = targetElement.getAttribute("window-name");
-        for (let i = 0; i < running_apps.length; i++) {
-            if (running_apps[i].window_name === window) {
-                running_apps.splice(i, 1);
-            }
-        }
-        loadApps();
+        let selectedWindow = targetElement.getAttribute("window-name");
+        closeWindow(selectedWindow);
     } else if (targetElement.id === "save") {
         for (let i = 0; i < running_apps.length; i++) {
             if (running_apps[i].window_name === "notepad") {
@@ -772,24 +756,29 @@ document.addEventListener("click", function (e) {
     }
 })
 
-let drag;
-let mouseX;
-let mouseY;
+function closeWindow(id) {
+    for (let i = 0; i < running_apps.length; i++) {
+        if (running_apps[i].id === parseInt(id)) {
+            running_apps.splice(i, 1);
+        }
+    }
+    loadApps();
+}
 
 function loadApps() {
     app_display.innerHTML = "";
     for (let i = 0; i < running_apps.length; i++) {
         let window_content = document.createElement("div");
+        window_content.id = running_apps[i].id;
         window_content.className = "app-window";
         window_content.setAttribute("window-name", running_apps[i].window_name);
-        window_content.setAttribute("draggable", "true");
         window_content.innerHTML = `
-            <div class="opt-bar" id="${running_apps[i].window_name}">
+            <div class="opt-bar">
                 <div class="window-title" id="window-title">
                     ${capitalize(running_apps[i].window_name)}
                 </div>
                 <div class="opt">
-                    <div class="opt-btn opt-close" id="close" window-name="${running_apps[i].window_name}">X</div>
+                    <div class="opt-btn opt-close" id="close" window-name="${running_apps[i].id}">X</div>
                 </div>
             </div>
             <div class="app">
@@ -802,35 +791,11 @@ function loadApps() {
             </div>
         `
 
-        window_content.style.top = running_apps[i].posY;
-        window_content.style.left = running_apps[i].posX;
+        let top_bar = document.getElementsByClassName("opt-bar");
 
-        window_content.onclick = function (e) {
-            window_content.style.zIndex += 9;
-        }
+        window_content.style.top = `calc(calc(${i * 10}px + 30px) * 3)`;
+        window_content.style.left = `calc(calc(${i * 10}px + 30px) * 3)`;
         
-        window_content.addEventListener('mousedown', function (e) {
-            offsetX = e.clientX - window_content.getBoundingClientRect().left;
-            offsetY = e.clientY - window_content.getBoundingClientRect().top;
-            running_apps[i].drag = true;
-            window_content.style.zIndex += 9;
-        });
-
-        document.addEventListener('mousemove', function (e) {
-            if (running_apps.length > 0) {
-                if (running_apps[i].drag) {
-                    running_apps[i].posX = `${e.clientX - offsetX}px`;
-                    running_apps[i].posY = `${e.clientY - offsetY}px`;
-                    window_content.style.left = running_apps[i].posX;
-                    window_content.style.top = running_apps[i].posY;
-                }
-            }
-        });
-        
-        window_content.addEventListener('mouseup', function () {
-            running_apps[i].drag = false;
-        });
-
         app_display.appendChild(window_content);
     }
 }
