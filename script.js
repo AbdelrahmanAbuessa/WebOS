@@ -18,6 +18,7 @@ let settings = new Object({
     program: "settings",
 })
 
+let notepad_saves = [];
 let desktop_programs = [notepad, paint, calc];
 
 window.onload = function () {
@@ -28,6 +29,7 @@ window.onload = function () {
             document.body.style.color = "white";
         } else {
             desktop_programs = JSON.parse(localStorage.getItem("desktop-data"));
+            notepad_saves = JSON.parse(localStorage.getItem("notepad-saving"));
             desktop.style.backgroundColor = localStorage.getItem("bgColor");
             password = localStorage.getItem("password");
             username = localStorage.getItem("username");
@@ -680,8 +682,6 @@ desktop.innerHTML = `
     </div>
 `
 
-let notepad_saves = [];
-
 let start_programs = [settings, notepad, paint, calc];
 
 let app_display = document.createElement("div");
@@ -885,13 +885,13 @@ document.addEventListener("click", function (e) {
 
 function shutdown() {
     installation_corrupted = false;
-    password = "mohemmat";
 
     localStorage.setItem("corrupted", JSON.stringify(installation_corrupted));
     localStorage.setItem("username", username);
     localStorage.setItem("password", password);
     localStorage.setItem("bgColor", desktop.style.backgroundColor);
     localStorage.setItem("desktop-data", JSON.stringify(desktop_programs));
+    localStorage.setItem("notepad-saving", JSON.stringify(notepad_saves));
 
     document.body.innerHTML = "";
 
@@ -1028,7 +1028,7 @@ function loadApps() {
 function saveNotePad() {
     let textarea = document.getElementById("notepad_write");
     let notepad_file = new Object({
-        program: `notepad-save-${desktop_programs.length - 4}`,
+        program: `notepad-save-${desktop_programs.length - 3}`,
     })
     notepad_saves.push(textarea.value);
     desktop_programs.push(notepad_file);
@@ -1047,7 +1047,7 @@ function addFunction(type) {
 
         for (let i = 0; i < desktop_programs.length; i++) {
             if (type.window_name === desktop_programs[i].program) {
-                notepad_content = notepad_saves[i - 4];
+                notepad_content = notepad_saves[i - 3];
             }
         }
 
