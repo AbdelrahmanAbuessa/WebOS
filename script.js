@@ -659,9 +659,18 @@ let exp = new Object({
 let desktop_programs = [exp, notepad, paint, calc];
 let start_programs = [cmd, settings, exp, notepad, paint, calc];
 
+let start;
+
 let app_display = document.createElement("div");
 app_display.className = "open-apps";
 app_display.id = "open-apps";
+
+document.addEventListener("click", function (e) {
+    let targetElement = e.target;
+    if (targetElement.hasAttribute("program")) {
+        startApp(targetElement);
+    }
+})
 
 createDesktop();
 
@@ -669,7 +678,7 @@ function createDesktop() {
     document.body.innerHTML = "";
     document.body.appendChild(app_display);
     document.body.appendChild(desktop);
-    
+
     let start_menu = document.getElementById("start");
     start_menu.style.display = "none";
     
@@ -702,13 +711,6 @@ function createDesktop() {
         `
         desktop_shortcuts.appendChild(shortcut);
     });
-
-    document.addEventListener("click", function (e) {
-        let targetElement = e.target;
-        if (targetElement.hasAttribute("program")) {
-            startApp(targetElement);
-        }
-    })
 
     let start_btn = document.getElementById("open-start");
     let toggle_start_menu = 0; 
@@ -790,8 +792,6 @@ function loadApps() {
                 </div>
             </div>
         `
-
-        let top_bar = document.getElementsByClassName("opt-bar");
 
         window_content.style.top = `calc(calc(${i * 10}px + 30px) * 3)`;
         window_content.style.left = `calc(calc(${i * 10}px + 30px) * 3)`;
