@@ -684,6 +684,8 @@ desktop.innerHTML = `
     </div>
 `
 
+let taskbar_open_icons;
+
 let start_programs = [settings, notepad, paint, calc];
 
 let app_display = document.createElement("div");
@@ -800,6 +802,8 @@ function createDesktop() {
             start_menu.style.display = "none";
         }
     }
+
+    taskbar_open_icons = document.getElementById("open-programs-start");
 
     let allFiles = document.getElementsByClassName("logal");
     for (let i = 0; i < allFiles.length; i++) {
@@ -974,6 +978,8 @@ function closeWindow(id) {
 
 function loadApps() {
     app_display.innerHTML = "";
+    taskbar_open_icons.innerHTML = "";
+
     for (let i = 0; i < running_apps.length; i++) {
         let window_content = document.createElement("div");
         window_content.id = running_apps[i].id;
@@ -1045,6 +1051,32 @@ function loadApps() {
             bg_color_input = document.getElementById("change-bgcolor");
             warning_msg = document.getElementById("del-warning");
         }
+
+        let taskbarIcon = document.createElement("div");
+        taskbarIcon.setAttribute("window-name", running_apps[i].window_name);
+        taskbarIcon.id = running_apps[i].id;
+
+        let taskbarIconLogo = document.createElement("img");
+        taskbarIconLogo.width = 35;
+
+        if (taskbarIcon.window_name === "paint") {
+            taskbarIconLogo.setAttribute("src")
+        } else if (taskbarIcon.window_name === "notepad") {
+            taskbarIcon.innerHTML = `
+                <img src="https://www.freeiconspng.com/uploads/notepad-icon-7.png" width="35" alt="Drawing Vector Notepad" />
+            `
+        } else if (taskbarIcon.window_name === "calc") {
+            taskbarIcon.innerHTML = `
+                <img src="https://www.freeiconspng.com/uploads/calculator-icon-1.png" width="35" alt="Calculator Simple Png" />
+            `
+        } else if (taskbarIcon.window_name === "settings") {
+            taskbarIcon.appendChild(`
+                <img src="https://www.freeiconspng.com/uploads/settings-icon-4.png" width="35" alt="Windows Icons Settings For" />
+            `)
+        }
+        console.log(taskbarIcon);
+        taskbar_open_icons.appendChild(taskbarIcon);
+        taskbarIcon.appendChild(taskbarIconLogo);
     }
 }
 
