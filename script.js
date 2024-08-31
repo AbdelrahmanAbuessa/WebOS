@@ -741,10 +741,21 @@ function startApp(element) {
     }
 }
 
+let calculatorOutput;
+
+let numA;
+let numB;
+let op;
+
 document.addEventListener("click", function (e) {
     let targetElement = e.target;
     if (targetElement.id === "close") {
         let selectedWindow = targetElement.getAttribute("window-name");
+        if (selectedWindow === "calc") {
+            numA = undefined;
+            numB = undefined;
+            op = undefined;
+        }
         closeWindow(selectedWindow);
     } else if (targetElement.id === "save") {
         for (let i = 0; i < running_apps.length; i++) {
@@ -752,8 +763,50 @@ document.addEventListener("click", function (e) {
                 saveNotePad();
             }
         }
+    } else if (targetElement.className === "number" ||
+        targetElement.className === "operation"
+    ) {
+        calculatorOutput.innerText = "";
+        calculatorOutput.innerText += targetElement.innerText;
+        if (targetElement.className === "number") {
+            if (numA === undefined) {
+                numA = parseInt(targetElement.innerText);
+                console.log(numA);
+            } else if (numB === undefined) {
+                numB = parseInt(targetElement.innerText);
+                console.log(numB);
+            }
+        } else if (targetElement.className === "operation") {
+            op = targetElement.id;
+            console.log(op);
+        }
+        if (numA !== undefined && numB !== undefined && op != undefined) {
+            calculatorOutput.innerText = calculate(numA, numB, op);
+            numA = undefined;
+            numB = undefined;
+            op = undefined;
+        }
     }
 })
+
+function calculate(n1, n2, o) {
+    switch (o) {
+        case "add":
+            return n1 + n2;
+        case "subtract":
+            return n1 - n2;
+        case "multiply":
+            return n1 * n2;
+        case "divide":
+            if (n2 === 0) {
+                return "ERR"
+            } else {
+                return n1 / n2;
+            }
+        default:
+            return "ERR"
+    }
+}
 
 function closeWindow(id) {
     for (let i = 0; i < running_apps.length; i++) {
@@ -830,6 +883,8 @@ function loadApps() {
             canvas.onmousedown = startLine;
             canvas.onmouseup = finishLine;
             canvas.onmousemove = line;
+        } else if (running_apps[i].window_name === "calc") {
+            calculatorOutput = document.getElementById("output");
         }
     }
 }
@@ -879,25 +934,21 @@ function addFunction(type) {
         <div class="calc">
             <div class="output" id="output">000</div>
             <div class="input">
-                <div class="numpad">
                     <div class="number" id="one">1</div>
                     <div class="number" id="two">2</div>
                     <div class="number" id="three">3</div>
+                    <div class="operation" id="add">+</div>
                     <div class="number" id="four">4</div>
                     <div class="number" id="five">5</div>
                     <div class="number" id="six">6</div>
+                    <div class="operation" id="subtract">-</div>
                     <div class="number" id="seven">7</div>
                     <div class="number" id="eight">8</div>
                     <div class="number" id="nine">9</div>
-                    <div class="number" id="zero">0</div>
-                </div>
-                <div class="action">
-                    <div class="operation" id="add">+</div>
-                    <div class="operation" id="subtract">-</div>
                     <div class="operation" id="divide">÷</div>
-                    <div class="operation" id="multiply">×</div>
+                    <div class="number" id="zero">0</div>
                     <div class="operation" id="equal">=</div>
-                </div>
+                    <div class="operation" id="multiply">×</div>
             </div>
         </div>
         `
