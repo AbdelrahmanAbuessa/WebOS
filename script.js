@@ -659,8 +659,6 @@ let exp = new Object({
 let desktop_programs = [exp, notepad, paint, calc];
 let start_programs = [cmd, settings, exp, notepad, paint, calc];
 
-let start;
-
 let app_display = document.createElement("div");
 app_display.className = "open-apps";
 app_display.id = "open-apps";
@@ -795,8 +793,45 @@ function loadApps() {
 
         window_content.style.top = `calc(calc(${i * 10}px + 30px) * 3)`;
         window_content.style.left = `calc(calc(${i * 10}px + 30px) * 3)`;
-        
+
         app_display.appendChild(window_content);
+
+        if (running_apps[i].window_name === "paint") {
+            let canvas = document.getElementById("canvas");
+            let ctx = canvas.getContext("2d");
+            let brushSize = 5;
+
+            canvas.width = 500;
+            canvas.height = 300;
+            
+            let drawing = false;
+            
+            function startLine(e) {
+                drawing = true;
+                line(e)
+            };
+            
+            function finishLine() {
+                drawing = false;
+                ctx.beginPath();
+            };
+            
+            function line(e) {
+                if (drawing) {
+                    ctx.strokeStyle = "black";
+                    ctx.lineCap = "round";
+                    ctx.lineWidth = brushSize;
+                    ctx.lineTo(e.clientX - 90, e.clientY - 145);
+                    ctx.stroke();
+                    ctx.beginPath();
+                    ctx.moveTo(e.clientX - 90, e.clientY - 145);
+                }
+            }
+
+            canvas.onmousedown = startLine;
+            canvas.onmouseup = finishLine;
+            canvas.onmousemove = line;
+        }
     }
 }
 
@@ -831,11 +866,17 @@ function addFunction(type) {
                 ${notepad_content}
             </textarea>
         `;
+    } else if (type.window_name === "paint") {
+        return `
+            <canvas id="canvas" width="500" height="300" class="canvas">
+
+            </canvas>
+        `
+    } else if (type.window_name === "cmd") {
+        
     }
     // exp
     // calc
-    // notepad
     // cmd
-    // paint
     // settings
 }

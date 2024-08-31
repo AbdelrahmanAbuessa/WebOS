@@ -565,3 +565,7 @@ li {
     border: none;
     outline: none;
 }
+
+.canvas {
+    background-color: white;
+}
