@@ -658,6 +658,8 @@ desktop.innerHTML = `
     </div>
     <div class="taskbar">
         <div class="start-menu-btn" id="open-start">Start</div>
+        <div class="open-programs-start" id="open-programs-start">
+        </div>
         <div class="dt">
             <div class="time" id="time">12:60 PM</div>
             <div class="date" id="date">8/6/2024</div>
@@ -768,7 +770,7 @@ function createDesktop() {
         shortcut.setAttribute("program", "");
         shortcut.id = item.program;
         shortcut.innerHTML = `
-            <div class="start-icon">${capitalize(item.program[0])}</div>
+            <div class="start-icon logal">${capitalize(item.program[0])}</div>
             <div class="text">${capitalize(item.program)}</div>
         `
         start_menu_programs.appendChild(shortcut);
@@ -780,7 +782,7 @@ function createDesktop() {
         shortcut.id = item.program;
         shortcut.setAttribute("program", "");
         shortcut.innerHTML = `
-            <div>${capitalize(item.program[0])}</div>
+            <div class="logal">${capitalize(item.program[0])}</div>
             <div class="subfile-name">${capitalize(item.program)}</div>
         `
         desktop_shortcuts.appendChild(shortcut);
@@ -796,6 +798,27 @@ function createDesktop() {
         } else if (toggle_start_menu === 1) {
             toggle_start_menu = 0;
             start_menu.style.display = "none";
+        }
+    }
+
+    let allFiles = document.getElementsByClassName("logal");
+    for (let i = 0; i < allFiles.length; i++) {
+        if (allFiles[i].innerText === "N") {
+            allFiles[i].innerHTML = `
+            <img src="https://www.freeiconspng.com/uploads/notepad-icon-7.png" width="35" alt="Drawing Vector Notepad" />
+            `
+        } else if (allFiles[i].innerText === "P") {
+            allFiles[i].innerHTML = `
+            <img src="https://www.freeiconspng.com/uploads/paint-brush-icon-png-17.png" width="35" alt="Vector Paint Brush Icon" />
+            `
+        } else if (allFiles[i].innerText === "C") {
+            allFiles[i].innerHTML = `
+            <img src="https://www.freeiconspng.com/uploads/calculator-icon-1.png" width="35" alt="Calculator Simple Png" />
+            `
+        } else if (allFiles[i].innerText === "S") {
+            allFiles[i].innerHTML = `
+            <img src="https://www.freeiconspng.com/uploads/settings-icon-4.png" width="35" alt="Windows Icons Settings For" />
+            `
         }
     }
 }
