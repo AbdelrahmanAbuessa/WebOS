@@ -18,7 +18,7 @@ let settings = new Object({
     program: "settings",
 })
 
-let notepad_saves = [];
+
 let desktop_programs = [notepad, paint, calc];
 
 window.onload = function () {
