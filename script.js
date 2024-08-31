@@ -1,11 +1,53 @@
+let username;
+let password;
+let installation_corrupted = false;
+
+let notepad = new Object({
+    program: "notepad",
+})
+
+let paint = new Object({
+    program: "paint",
+})
+
+let calc = new Object({
+    program: "calc",
+})
+
+let settings = new Object({
+    program: "settings",
+})
+
+let desktop_programs = [notepad, paint, calc];
+
+window.onload = function () {
+    if (localStorage.getItem("corrupted")) {
+        if (localStorage.getItem("corrupted") === "true") {
+            installation_corrupted = true;
+            document.body.innerHTML = `ERR`;
+            document.body.style.color = "white";
+        } else {
+            desktop_programs = JSON.parse(localStorage.getItem("desktop-data"));
+            desktop.style.backgroundColor = localStorage.getItem("bgColor");
+            password = localStorage.getItem("password");
+            username = localStorage.getItem("username");
+            loginPage();
+        }
+    } else {
+        existing_user = false;
+        installation_corrupted = false;
+        loadCMD(null);
+    }
+}
+
+function loginPage() {
+    document.body.innerHTML = "";
+    // document.
+}
+
 let cmd_content = [];
 
 let running_apps = [];
-
-let username;
-let password;
-
-let installation_corrupted = false;
 
 let dialogue = [];
 
@@ -15,15 +57,6 @@ let delay = 0;
 
 let instal_terminal_window = document.createElement("div");
 instal_terminal_window.className = "installation-terminal-window"
-
-let existing_user = false;
-if (existing_user) {
-    document.body.innerHTML = "";
-    // load welcome screen
-} else {
-    // document.body.innerHTML = "";
-    // loadCMD(null);
-}
 
 document.addEventListener("keypress", function (e) {
     let key = e.key;
@@ -450,18 +483,18 @@ window_.innerHTML = dialogue[index];
 initial_setup.appendChild(window_);
 
 function installOS() {
-    // window.setTimeout(function () {
-    //     document.body.innerHTML = "";
-    // }, delay / 2)
-    // window.setTimeout(function () {
-    //     document.body.appendChild(startup_loading);
-    // }, delay);
-    // window.setTimeout(function () {
-    //     document.body.innerHTML = "";
-    // }, delay * 2)
-    // window.setTimeout(function () {
-    //     document.body.appendChild(initial_setup);
-    // }, delay * 2.5)
+    window.setTimeout(function () {
+        document.body.innerHTML = "";
+    }, delay / 2)
+    window.setTimeout(function () {
+        document.body.appendChild(startup_loading);
+    }, delay);
+    window.setTimeout(function () {
+        document.body.innerHTML = "";
+    }, delay * 2)
+    window.setTimeout(function () {
+        document.body.appendChild(initial_setup);
+    }, delay * 2.5)
 }
 
 document.addEventListener("click", function (e) {
@@ -479,6 +512,8 @@ document.addEventListener("click", function (e) {
         installation_corrupted = true;
         document.body.innerHTML = `ERR`;
         document.body.style.color = "white";
+        localStorage.setItem("corrupted", installation_corrupted);
+        window.reload();
     }
 })
 
@@ -567,7 +602,7 @@ function userSettings() {
                 `
                 window.setTimeout(function () {
                     document.body.innerHTML = "";
-                    desktop();
+                    createDesktop();
                 }, 2000) // remember to change this 
             }
         }
@@ -618,23 +653,6 @@ desktop.innerHTML = `
 
 let notepad_saves = [];
 
-let notepad = new Object({
-    program: "notepad",
-})
-
-let paint = new Object({
-    program: "paint",
-})
-
-let calc = new Object({
-    program: "calc",
-})
-
-let settings = new Object({
-    program: "settings",
-})
-
-let desktop_programs = [notepad, paint, calc];
 let start_programs = [settings, notepad, paint, calc];
 
 let app_display = document.createElement("div");
@@ -647,8 +665,6 @@ document.addEventListener("click", function (e) {
         startApp(targetElement);
     }
 })
-
-createDesktop();
 
 function updateTime(t, d) {
     let time = new Date();
@@ -839,8 +855,14 @@ document.addEventListener("click", function (e) {
 })
 
 function shutdown() {
+    installation_corrupted = false;
+    password = "mohemmat";
 
-    // Add localStorage saving Here
+    localStorage.setItem("corrupted", JSON.stringify(installation_corrupted));
+    localStorage.setItem("username", username);
+    localStorage.setItem("password", password);
+    localStorage.setItem("bgColor", desktop.style.backgroundColor);
+    localStorage.setItem("desktop-data", JSON.stringify(desktop_programs));
 
     document.body.innerHTML = "";
 
@@ -856,15 +878,13 @@ function shutdown() {
         document.body.innerHTML = "";
     }, 3000); // change this
     window.setTimeout(function () {
-        window.close();
+        // window.close();
+        console.log("window-closed");
     }, 6000); // change this
 }
 
 function deleteData() {
-
-    // Add localStorage deleting here
-
-    console.log("deleting all data");
+    localStorage.clear();
 }
 
 function changeSettings() {
@@ -1061,4 +1081,3 @@ function addFunction(type) {
 
 // Things yet to do:
 // 1- add icons to desktop (make it prettier)
-// 5- add localstorage (storing notepad files, user&pass, err)
