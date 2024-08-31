@@ -466,115 +466,115 @@ function installOS() {
 }
 
 
-// document.addEventListener("click", function (e) {
-    //     let targetElement = e.target;
-    //     if (targetElement.id === "setup-proceed") {
-        //         index += 1;
-//         if (dialogue[index] === "installation-loading") {
-//             startInstall();
-//         } else if (dialogue[index] === undefined) {
-//             index -= 1;
-//         } else {
-//             window_.innerHTML = dialogue[index];
-//         }
-//     } else if (targetElement.id === "abort-installation") {
-//         installation_corrupted = true;
-//         document.body.innerHTML = `ERR`;
-//         document.body.style.color = "white";
-//     }
-// })
+document.addEventListener("click", function (e) {
+        let targetElement = e.target;
+        if (targetElement.id === "setup-proceed") {
+                index += 1;
+        if (dialogue[index] === "installation-loading") {
+            startInstall();
+        } else if (dialogue[index] === undefined) {
+            index -= 1;
+        } else {
+            window_.innerHTML = dialogue[index];
+        }
+    } else if (targetElement.id === "abort-installation") {
+        installation_corrupted = true;
+        document.body.innerHTML = `ERR`;
+        document.body.style.color = "white";
+    }
+})
 
-// function startInstall() {
-//     window_.innerHTML = "";
-//     window_.innerHTML = install_page;
+function startInstall() {
+    window_.innerHTML = "";
+    window_.innerHTML = install_page;
 
-//     let info_col = document.getElementById("info-calc");
-//     let init_setup = document.getElementById("setup-init");
-//     let framework = document.getElementById("frmwrk");
-//     let stngs = document.getElementById("settings");
-//     let ux = document.getElementById("ux");
-//     setup_percentage.push(info_col);
-//     setup_percentage.push(init_setup);
-//     setup_percentage.push(framework);
-//     setup_percentage.push(stngs);
-//     setup_percentage.push(ux);
+    let info_col = document.getElementById("info-calc");
+    let init_setup = document.getElementById("setup-init");
+    let framework = document.getElementById("frmwrk");
+    let stngs = document.getElementById("settings");
+    let ux = document.getElementById("ux");
+    setup_percentage.push(info_col);
+    setup_percentage.push(init_setup);
+    setup_percentage.push(framework);
+    setup_percentage.push(stngs);
+    setup_percentage.push(ux);
 
-//     let bar = document.getElementById("bar");
-//     bar.width = 0;
-//     bar.style.width = 0;
+    let bar = document.getElementById("bar");
+    bar.width = 0;
+    bar.style.width = 0;
 
-//     setup_percentage.forEach(element => {
-//         let time;
-//         let number = 0;
-//         if (time !== undefined) {
-//             return;
-//         } else {
-//             time = setInterval(function () {
-//                 if (number < 1) {
-//                     let increment = Math.random() / 20;
-//                     number += increment;
-//                     bar.style.width = `${bar.width += (increment * 950) / 5}px`;
-//                     element.innerHTML = `(${Math.floor(number * 100)}%)`
-//                 } else {
-//                     bar.style.width = `930px`;
-//                     element.innerHTML = `(100%)`
-//                     clearInterval(time);
-//                     time = undefined;
-//                     window.setTimeout(function () {
-//                         startOS();
-//                     }, 1000); // remember to change this
-//                 }
-//             }, delay) // remember to change this
-//         }
-//     });
-// }
+    setup_percentage.forEach(element => {
+        let time;
+        let number = 0;
+        if (time !== undefined) {
+            return;
+        } else {
+            time = setInterval(function () {
+                if (number < 1) {
+                    let increment = Math.random() / 20;
+                    number += increment;
+                    bar.style.width = `${bar.width += (increment * 950) / 5}px`;
+                    element.innerHTML = `(${Math.floor(number * 100)}%)`
+                } else {
+                    bar.style.width = `930px`;
+                    element.innerHTML = `(100%)`
+                    clearInterval(time);
+                    time = undefined;
+                    window.setTimeout(function () {
+                        startOS();
+                    }, 1000); // remember to change this
+                }
+            }, delay) // remember to change this
+        }
+    });
+}
 
-// function startOS() {
-//     document.body.innerHTML = ""
-//     window.setTimeout(function () {
-//         document.body.appendChild(startup_loading);
-//     }, 1000) // remember to change this
-//     window.setTimeout(function () {
-//         document.body.innerHTML = "";
-//     }, 2000) // remember to change this
-//     window.setTimeout(function () {
-//         window_.innerHTML = user_settings_setup;
-//         document.body.appendChild(initial_setup);
-//         userSettings();
-//     }, 3000) // remember to change this
-// }
+function startOS() {
+    document.body.innerHTML = ""
+    window.setTimeout(function () {
+        document.body.appendChild(startup_loading);
+    }, 1000) // remember to change this
+    window.setTimeout(function () {
+        document.body.innerHTML = "";
+    }, 2000) // remember to change this
+    window.setTimeout(function () {
+        window_.innerHTML = user_settings_setup;
+        document.body.appendChild(initial_setup);
+        userSettings();
+    }, 3000) // remember to change this
+}
 
-// function userSettings() {
-//     let username_text = document.getElementById("username");
-//     let new_password_text = document.getElementById("n-pass");
-//     let check_password = document.getElementById("check-pass");
-//     let user_error = document.getElementById("user-error");
-//     document.addEventListener("click", function (e) {
-//         let targetElement = e.target;
-//         if (targetElement.id === "confirm-user") {
-//             if (username_text.value === "" || new_password_text.value === "" || check_password.value === "") {
-//                 user_error.innerText = "Please Fill out All Values"
-//             } else {
-//                 if (check_password.value !== new_password_text.value) {
-//                     user_error.innerText = "Passwords Do Not Match"
-//                 } else {
-//                     password = check_password.value;
-//                     user_error.innerText = "";
-//                 }
-//                 username = username_text.value;
-//                 existing_user = true;
-//                 window_.innerHTML = `
-//                     <div class="setup-title wamed">Welcome, ${capitalize(username)}!</div>
-//                     <div class="setup-subtitle wamed">Please Be Patient while we set up your desktop</div>
-//                 `
-//                 window.setTimeout(function () {
-//                     document.body.innerHTML = "";
-//                     desktop();
-//                 }, 2000) // remember to change this 
-//             }
-//         }
-//     })
-// }
+function userSettings() {
+    let username_text = document.getElementById("username");
+    let new_password_text = document.getElementById("n-pass");
+    let check_password = document.getElementById("check-pass");
+    let user_error = document.getElementById("user-error");
+    document.addEventListener("click", function (e) {
+        let targetElement = e.target;
+        if (targetElement.id === "confirm-user") {
+            if (username_text.value === "" || new_password_text.value === "" || check_password.value === "") {
+                user_error.innerText = "Please Fill out All Values"
+            } else {
+                if (check_password.value !== new_password_text.value) {
+                    user_error.innerText = "Passwords Do Not Match"
+                } else {
+                    password = check_password.value;
+                    user_error.innerText = "";
+                }
+                username = username_text.value;
+                existing_user = true;
+                window_.innerHTML = `
+                    <div class="setup-title wamed">Welcome, ${capitalize(username)}!</div>
+                    <div class="setup-subtitle wamed">Please Be Patient while we set up your desktop</div>
+                `
+                window.setTimeout(function () {
+                    document.body.innerHTML = "";
+                    desktop();
+                }, 2000) // remember to change this 
+            }
+        }
+    })
+}
 
 function capitalize(string) {
     return string[0].toUpperCase() + string.substr(1, string.length - 1);
@@ -588,7 +588,6 @@ desktop.className = "desktop";
 // each open program will appear on the task bar, clicking the minimize btn or the icon on the task bar
 // will cause the program to toggle visibility
 // list of possible programs i can make from this:
-// 2- paint
 // 3- calculator
 // 4- settings
 // 5- cmd 
@@ -873,7 +872,35 @@ function addFunction(type) {
             </canvas>
         `
     } else if (type.window_name === "cmd") {
-        
+        // loadCMD(null);
+        console.log("cmd");
+    } else if (type.window_name === "calc") {
+        return `
+        <div class="calc">
+            <div class="output" id="output">000</div>
+            <div class="input">
+                <div class="numpad">
+                    <div class="number" id="one">1</div>
+                    <div class="number" id="two">2</div>
+                    <div class="number" id="three">3</div>
+                    <div class="number" id="four">4</div>
+                    <div class="number" id="five">5</div>
+                    <div class="number" id="six">6</div>
+                    <div class="number" id="seven">7</div>
+                    <div class="number" id="eight">8</div>
+                    <div class="number" id="nine">9</div>
+                    <div class="number" id="zero">0</div>
+                </div>
+                <div class="action">
+                    <div class="operation" id="add">+</div>
+                    <div class="operation" id="subtract">-</div>
+                    <div class="operation" id="divide">÷</div>
+                    <div class="operation" id="multiply">×</div>
+                    <div class="operation" id="equal">=</div>
+                </div>
+            </div>
+        </div>
+        `
     }
     // exp
     // calc
