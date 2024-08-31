@@ -659,6 +659,7 @@ desktop.innerHTML = `
     <div class="taskbar">
         <div class="start-menu-btn" id="open-start">Start</div>
         <div class="open-programs-start" id="open-programs-start">
+
         </div>
         <div class="dt">
             <div class="time" id="time">12:60 PM</div>
@@ -684,7 +685,7 @@ desktop.innerHTML = `
     </div>
 `
 
-let taskbar_open_icons;
+let taskbarGroup;
 
 let start_programs = [settings, notepad, paint, calc];
 
@@ -752,6 +753,8 @@ function createDesktop() {
     document.body.appendChild(app_display);
     document.body.appendChild(desktop);
 
+    taskbarGroup = document.getElementById("open-programs-start");
+
     let time_display = document.getElementById("time");
     let date_display = document.getElementById("date");
 
@@ -802,8 +805,6 @@ function createDesktop() {
             start_menu.style.display = "none";
         }
     }
-
-    taskbar_open_icons = document.getElementById("open-programs-start");
 
     let allFiles = document.getElementsByClassName("logal");
     for (let i = 0; i < allFiles.length; i++) {
@@ -881,14 +882,11 @@ document.addEventListener("click", function (e) {
         if (targetElement.className === "number") {
             if (numA === undefined) {
                 numA = parseInt(targetElement.innerText);
-                console.log(numA);
             } else if (numB === undefined) {
                 numB = parseInt(targetElement.innerText);
-                console.log(numB);
             }
         } else if (targetElement.className === "operation") {
             op = targetElement.id;
-            console.log(op);
         }
         if (numA !== undefined && numB !== undefined && op != undefined) {
             calculatorOutput.innerText = calculate(numA, numB, op);
@@ -907,8 +905,22 @@ document.addEventListener("click", function (e) {
         }
     } else if (targetElement.id === "shutdown") {
         shutdown();
+    } else if (targetElement.hasAttribute("src")) {
+        toggleWindow(targetElement.id);
+    } else if (targetElement.id === "mini") {
+        let selectedWindow = targetElement.getAttribute("window-name");
+        hideWindow(selectedWindow);
     }
 })
+
+function toggleWindow(index) {
+    if (running_apps[parseInt(index)].hideout === "false") {
+        running_apps[parseInt(index)].hideout = "true";
+    } else {
+        running_apps[parseInt(index)].hideout = "false";
+    }
+    loadApps();
+}
 
 function shutdown() {
     installation_corrupted = false;
@@ -976,15 +988,25 @@ function closeWindow(id) {
     loadApps();
 }
 
+function hideWindow(id) {
+    for (let i = 0; i < running_apps.length; i++) {
+        if (running_apps[i].id === parseInt(id)) {
+            running_apps[i].hideout = "true";
+        }
+    }
+    loadApps();
+}
+
 function loadApps() {
     app_display.innerHTML = "";
-    taskbar_open_icons.innerHTML = "";
+    taskbarGroup.innerHTML = "";
 
     for (let i = 0; i < running_apps.length; i++) {
         let window_content = document.createElement("div");
         window_content.id = running_apps[i].id;
         window_content.className = "app-window";
         window_content.setAttribute("window-name", running_apps[i].window_name);
+        window_content.setAttribute("hideout", running_apps[i].hideout);
         window_content.innerHTML = `
             <div class="opt-bar">
                 <div class="window-title" id="window-title">
@@ -992,6 +1014,7 @@ function loadApps() {
                 </div>
                 <div class="opt">
                     <div class="opt-btn opt-close" id="close" window-name="${running_apps[i].id}">X</div>
+                    <div class="opt-btn" id="mini" window-name="${running_apps[i].id}">_</div>
                 </div>
             </div>
             <div class="app">
@@ -1052,31 +1075,22 @@ function loadApps() {
             warning_msg = document.getElementById("del-warning");
         }
 
-        let taskbarIcon = document.createElement("div");
-        taskbarIcon.setAttribute("window-name", running_apps[i].window_name);
-        taskbarIcon.id = running_apps[i].id;
-
-        let taskbarIconLogo = document.createElement("img");
-        taskbarIconLogo.width = 35;
-
-        if (taskbarIcon.window_name === "paint") {
-            taskbarIconLogo.setAttribute("src")
-        } else if (taskbarIcon.window_name === "notepad") {
-            taskbarIcon.innerHTML = `
-                <img src="https://www.freeiconspng.com/uploads/notepad-icon-7.png" width="35" alt="Drawing Vector Notepad" />
-            `
-        } else if (taskbarIcon.window_name === "calc") {
-            taskbarIcon.innerHTML = `
-                <img src="https://www.freeiconspng.com/uploads/calculator-icon-1.png" width="35" alt="Calculator Simple Png" />
-            `
-        } else if (taskbarIcon.window_name === "settings") {
-            taskbarIcon.appendChild(`
-                <img src="https://www.freeiconspng.com/uploads/settings-icon-4.png" width="35" alt="Windows Icons Settings For" />
-            `)
+        let taskbarAppIcon = document.createElement("img");
+        taskbarAppIcon.id = running_apps[i].id
+        taskbarAppIcon.width = 35;
+        taskbarAppIcon.window_name = running_apps[i].window_name;
+        if (taskbarAppIcon.window_name === "paint") {
+            taskbarAppIcon.src = "https://www.freeiconspng.com/uploads/paint-brush-icon-png-17.png";
+        } else if (taskbarAppIcon.window_name === "calc") {
+            taskbarAppIcon.src = "https://www.freeiconspng.com/uploads/calculator-icon-1.png";
+        } else if (taskbarAppIcon.window_name === "notepad") {
+            taskbarAppIcon.src = "https://www.freeiconspng.com/uploads/notepad-icon-7.png";
+        } else if (taskbarAppIcon.window_name === "settings") {
+            taskbarAppIcon.src = "https://www.freeiconspng.com/uploads/settings-icon-4.png";
+        } else if (taskbarAppIcon.window_name.indexOf("notepad-save" > 0)) {
+            taskbarAppIcon.src = "https://www.freeiconspng.com/uploads/notepad-icon-7.png";
         }
-        console.log(taskbarIcon);
-        taskbar_open_icons.appendChild(taskbarIcon);
-        taskbarIcon.appendChild(taskbarIconLogo);
+        taskbarGroup.appendChild(taskbarAppIcon);
     }
 }
 
@@ -1162,5 +1176,3 @@ function addFunction(type) {
         `
     }
 }
-
-// done :D

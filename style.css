@@ -722,3 +722,22 @@ li {
     color: red;
     font-weight: bold;
 }
+
+.open-programs-start {
+    width: 40%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.open-programs-start > img {
+    margin-right: 10px;
+}
+
+[hideout="false"] {
+    opacity: 1;
+}
+
+[hideout="true"] {
+    opacity: 0;
+}
