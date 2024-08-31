@@ -618,3 +618,75 @@ li {
     background-color: #174276;
     color: white;
 }
+
+.settings-title {
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    margin: 10px;
+}
+
+#del-warning {
+    display: none;
+}
+
+.settings-section {
+    width: 100%;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    background-color: white;
+}
+
+.settings-section input[type="text"] {
+    width: 200px;
+    height: 20px;
+    font-size: 18px;
+    padding: 10px;
+}
+
+.settings-section input[type="color"] {
+    width: 150px;
+}
+
+.settings-section label {
+    font-size: 18px;
+}
+
+.confirm-settings {
+    background-color: gray;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 10px;
+    color: white;
+    width: 200px;
+    height: 35px;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.del-data {
+    width: 150px;
+    height: 35px;
+    background-color: red;
+    border-radius: 10px;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.del-warning {
+    width: 100%;
+    margin-top: 10px;
+    text-align: center;
+    color: red;
+    font-weight: bold;
+}

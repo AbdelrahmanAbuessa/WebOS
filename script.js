@@ -587,14 +587,7 @@ desktop.className = "desktop";
 
 // each open program will appear on the task bar, clicking the minimize btn or the icon on the task bar
 // will cause the program to toggle visibility
-// list of possible programs i can make from this:
-// 3- calculator
-// 4- settings
-// 5- cmd 
-// 6- file explorer
-// creating a folder means creating an array, same way as file explorer will work.
-// right click to create a folder, rename one, or delete one.
-// deleting anything will cause its permanent death forever
+// 5- cmd
 
 desktop.innerHTML = `
     <div class="main-screen">
@@ -651,12 +644,8 @@ let cmd = new Object({
     program: "cmd",
 })
 
-let exp = new Object({
-    program: "exp",
-})
-
-let desktop_programs = [exp, notepad, paint, calc];
-let start_programs = [cmd, settings, exp, notepad, paint, calc];
+let desktop_programs = [notepad, paint, calc];
+let start_programs = [cmd, settings, notepad, paint, calc];
 
 let app_display = document.createElement("div");
 app_display.className = "open-apps";
@@ -743,9 +732,15 @@ function startApp(element) {
 
 let calculatorOutput;
 
+let warned = false;
+
 let numA;
 let numB;
 let op;
+
+let new_user_txt;
+let bg_color_input;
+let warning_msg;
 
 document.addEventListener("click", function (e) {
     let targetElement = e.target;
@@ -786,8 +781,26 @@ document.addEventListener("click", function (e) {
             numB = undefined;
             op = undefined;
         }
+    } else if (targetElement.id === "confirm-change") {
+        changeSettings();
+    } else if (targetElement.id === "del-data") {
+        if (!warned) {
+            warning_msg.style.display = "block";
+            warned = true;
+        } else {
+            deleteData();
+        }
     }
 })
+
+function deleteData() {
+    console.log("deleting all data");
+}
+
+function changeSettings() {
+    username = new_user_txt.value;
+    desktop.style.backgroundColor = bg_color_input.value;
+}
 
 function calculate(n1, n2, o) {
     switch (o) {
@@ -885,6 +898,10 @@ function loadApps() {
             canvas.onmousemove = line;
         } else if (running_apps[i].window_name === "calc") {
             calculatorOutput = document.getElementById("output");
+        } else if (running_apps[i].window_name === "settings") {
+            new_user_txt = document.getElementById("change-username");
+            bg_color_input = document.getElementById("change-bgcolor");
+            warning_msg = document.getElementById("del-warning");
         }
     }
 }
@@ -926,9 +943,6 @@ function addFunction(type) {
 
             </canvas>
         `
-    } else if (type.window_name === "cmd") {
-        // loadCMD(null);
-        console.log("cmd");
     } else if (type.window_name === "calc") {
         return `
         <div class="calc">
@@ -952,9 +966,27 @@ function addFunction(type) {
             </div>
         </div>
         `
+    } else if (type.window_name === "settings") {
+        return `
+            <div class="settings">
+                <div class="settings-title">Settings</div>
+                <div class="settings-section">
+                    <label for="change-username">Change Username:</label>
+                    <input type="text" id="change-username" placeholder="New Username">
+                </div>
+                <div class="settings-section">
+                    <label for="change-bgcolor">Change Background Color:</label>
+                    <input type="color" id="change-bgcolor">
+                </div>
+                <div btn="" class="confirm-settings" id="confirm-change">Apply Changes</div>
+                <div class="settings-section">
+                    <label>Reset System:</label>
+                    <div btn="" class="del-data" id="del-data">Delete All Data</div>
+                    <div class="del-warning" id="del-warning">YOU WILL LOSE ALL YOUR DATA, CONTINUE?</div>
+                </div>
+            </div>
+        `
+    } else if (type.window_name === "cmd") {
+        loadCMD(null);
     }
-    // exp
-    // calc
-    // cmd
-    // settings
 }
